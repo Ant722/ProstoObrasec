@@ -6,8 +6,7 @@ services:
     image: ${AND_DOCKER_REGISTRY_NAME}/${PROJECT}-${APP}:${CI_COMMIT_BRANCH}
     container_name: ${APP}-${CI_COMMIT_BRANCH}
     restart: unless-stopped
-    volumes:
-      - ./:/var/www
+
 
   admin-webserver:
     image: nginx:1.23
