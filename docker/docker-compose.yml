@@ -1,0 +1,16 @@
+services:
+    app-admin-service:
+        restart: unless-stopped
+
+    webserver:
+        image: nginx:1.23
+        container_name: admin-service-webserver
+        restart: unless-stopped
+
+    db:
+        image: mysql:8.0
+        container_name: admin-service-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: admin_service
+            MYSQL_ROOT_PASSWORD: password
