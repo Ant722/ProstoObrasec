@@ -19,6 +19,23 @@ use OpenApi\Attributes as OA;
     version: '0.1',
     title: 'A-Money PHP Admin Service',
 )]
+#[OA\Schema(
+    schema: 'ValidationErrors',
+    properties: [
+        new OA\Property(
+            property: 'errors',
+            type: 'object',
+            example: [
+                'Название поля' => ['Сообщения об ошибках'],
+            ],
+            additionalProperties: new OA\AdditionalProperties(
+                type: 'array',
+                items: new OA\Items(type: 'string'),
+            ),
+        ),
+    ],
+    type: 'object',
+)]
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;

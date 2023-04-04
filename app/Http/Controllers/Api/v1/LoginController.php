@@ -34,10 +34,16 @@ class LoginController extends Controller
             new OA\Response(
                 response: 400,
                 description: 'В случае неверных входных данных',
+                content: new OA\JsonContent(
+                    allOf: [new OA\Schema(ref: '#/components/schemas/ValidationErrors')],
+                ),
             ),
             new OA\Response(
                 response: 401,
-                description: 'В случае, если введён неверный логин или пароль',
+                description: 'В случае, если введён неверные логин или пароль',
+                content: new OA\JsonContent(
+                    allOf: [new OA\Schema(ref: '#/components/schemas/ValidationErrors')],
+                ),
             ),
         ],
 
@@ -47,7 +53,11 @@ class LoginController extends Controller
         $credentials = $request->validated();
 
         if (! Auth::attempt($credentials)) {
-            return response()->json(status: 401);
+            return response()->json([
+                'errors' => [
+                    'login' => ['Invalid login or password.'],
+                ],
+            ], status: 401);
         }
 
         return (new UserResource(Auth::user()))->response();

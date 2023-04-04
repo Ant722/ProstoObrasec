@@ -15,8 +15,6 @@ use OpenApi\Attributes as OA;
             property: 'login',
             description: 'Логин',
             type: 'string',
-            maxLength: 255,
-            minLength: 3,
         ),
         new OA\Property(
             property: 'password',
@@ -38,7 +36,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => ['required', 'min:3', 'max:255'],
+            'login' => ['required'],
             'password' => ['required'],
         ];
     }
