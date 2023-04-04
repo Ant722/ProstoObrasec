@@ -10,7 +10,7 @@ services:
       - ../:/var/www
 
   admin--webserver:
-    image: nginx:alpine
+    image: nginx:1.23
     container_name: admin-service-webserver
     restart: unless-stopped
     tty: true
