@@ -19,7 +19,7 @@ docker-build:
   stage: build
   extends: .kaniko-build-template
   only:
-    - init-laravel
+    - main
 
 deploy:
   stage: deploy
@@ -27,8 +27,7 @@ deploy:
     - shell-dev
   extends: .deploy-template
   only:
-    - init-laravel
-
+    - main
 cleanup:
   stage: cleanup
   tags:
@@ -37,4 +36,4 @@ cleanup:
      - docker system prune -f --filter "label!=keep"
   when: always
   only:
-    - init-laravel
+    - main
