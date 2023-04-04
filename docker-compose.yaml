@@ -9,7 +9,7 @@ services:
     volumes:
       - ../:/var/www
 
-  admin--webserver:
+  admin-webserver:
     image: nginx:1.23
     container_name: admin-service-webserver
     restart: unless-stopped
