@@ -12,7 +12,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 COPY . /var/www
-
+RUN composer install
 RUN \
     groupadd -g $gid local && \
     useradd -m -g $gid -u $uid local && \
