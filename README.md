@@ -23,6 +23,6 @@ docker-compose \
 
 composer install
 php artisan key:generate
-php artisan migrate
+php artisan migrate:fresh
+php artisan l5-swagger:generate
 ```
-

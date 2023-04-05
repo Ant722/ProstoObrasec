@@ -19,4 +19,8 @@ RUN \
     chown -R $uid:$gid /var/www
 
 USER $uid
-CMD ["php-fpm"]
+CMD \
+    php artisan optimize && \
+    php artisan migrate --force --no-interaction && \
+    php artisan l5-swagger:generate && \
+    php-fpm
