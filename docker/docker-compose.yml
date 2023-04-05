@@ -1,5 +1,5 @@
 services:
-    app:
+    app-admin-service:
         restart: unless-stopped
 
     webserver:

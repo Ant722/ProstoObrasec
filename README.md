@@ -19,7 +19,7 @@ docker-compose \
 docker-compose \
     -f ./docker/docker-compose.yml \
     -f ./docker/docker-compose.local.yml \
-    exec -it app bash
+    exec -it app-admin-service bash
 
 composer install
 php artisan key:generate
