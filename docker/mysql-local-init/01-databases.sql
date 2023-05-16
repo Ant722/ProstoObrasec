@@ -1,2 +1,0 @@
-CREATE DATABASE IF NOT EXISTS `admin_service`;
-CREATE DATABASE IF NOT EXISTS `admin_service_test`;
