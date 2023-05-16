@@ -1,0 +1,1 @@
+INSERT INTO status( status_name ) VALUES ( 'ACTIVE' ), ( 'FIRED' ), ( 'TRANSFERRED' ), ( 'ON_VACATION' );

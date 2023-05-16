@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/scripts/2023_04_24_migrations_V1_create_role.sql
+  - include:
+      file: liquibase/scripts/2023_04_24_migrations_V2_create_status.sql
+  - include:
+      file: liquibase/scripts/2023_04_24_migrations_V3_create_employee.sql
+  - include:
+      file: liquibase/scripts/2023_04_24_migrations_V4_populate_role.sql
+  - include:
+      file: liquibase/scripts/2023_04_24_migrations_V5_populate_status.sql
+encoding: "UTF-8"
