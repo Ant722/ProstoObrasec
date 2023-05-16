@@ -1,0 +1,17 @@
+include:
+  - project: 'rvaliev/devops'
+    ref: main
+    file:
+      - 'templates/build-template.yml'
+      - 'templates/deploy-template.yml'
+      - 'templates/sonar-template.yml'
+
+stages:
+  - test
+
+run-test:
+  stage: test
+  extends: .sonar-mvn-template-jdk17
+  rules:
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "develop"'
+    - if: '$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "main"'
