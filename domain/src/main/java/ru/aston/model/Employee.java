@@ -118,4 +118,23 @@ public class Employee {
     @Column(name = "modified_at")
     @UpdateTimestamp
     private Instant modifiedAt;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", uuid=" + uuid +
+                ", surname='" + surname + '\'' +
+                ", name='" + name + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", passportId=" + passportId +
+                ", passportDateIssue=" + passportDateIssue +
+                ", role=" + role +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", modifiedAt=" + modifiedAt +
+                '}';
+    }
 }
