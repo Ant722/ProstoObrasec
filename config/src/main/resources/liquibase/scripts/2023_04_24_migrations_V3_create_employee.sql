@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS employee (
     passport_ID BIGINT NOT NULL,
     passport_date_issue DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modified_at TIMESTAMP
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
