@@ -2,17 +2,17 @@ application:
   name: admin-service
 
 server:
-  port: ${ADMIN_SERVICE_PORT}
+  port: ${ADMIN_SERVICE_PORT:6666}
 
 spring:
   application:
     name: admin-service
   datasource:
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER}
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.postgresql.Driver}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:admin}
 
-  liquibase:
-    enabled: 'true'
-    change-log: classpath:liquibase/changelog-master.yml
+#  liquibase:
+#    enabled: 'true'
+#    change-log: classpath:liquibase/changelog-master.yml

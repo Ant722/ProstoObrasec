@@ -10,4 +10,11 @@
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <artifactId>app</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>ru.aston</groupId>
+            <artifactId>adapter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
