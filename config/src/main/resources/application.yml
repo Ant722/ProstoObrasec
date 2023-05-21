@@ -13,6 +13,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:admin}
 
-#  liquibase:
-#    enabled: 'true'
-#    change-log: classpath:liquibase/changelog-master.yml
+  liquibase:
+    enabled: 'true'
+    change-log: classpath:liquibase/changelog-master.yml

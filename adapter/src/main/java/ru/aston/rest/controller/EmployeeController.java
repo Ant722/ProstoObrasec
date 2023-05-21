@@ -1,14 +1,10 @@
 package ru.aston.rest.controller;
 
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.aston.dto.request.EmployeeDto;
+import ru.aston.dto.request.EmployeeEditDto;
 import ru.aston.facade.EmployeeFacade;
-
-import java.util.UUID;
-
-import static ru.aston.util.ValidationConstants.UUID_PATTERN;
 
 @RestController
 @RequestMapping("api/v1/admin")
@@ -20,9 +16,11 @@ public class EmployeeController {
     @PutMapping("/employee/{employee_id}")
     public String editEmployee(
             @PathVariable(value = "employee_id") Long employeeId,
-            @RequestBody EmployeeDto dto,
-            @Pattern(regexp = UUID_PATTERN)UUID uuid
+            @Valid
+            @RequestBody EmployeeEditDto dto
             ) {
+        System.out.println("*********DTO*********\n" + dto);
+        employeeFacade.updateEmployeeInfo(dto);
         return "id = " + employeeId;
     }
 }
