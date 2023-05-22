@@ -2,7 +2,9 @@ package ru.aston.app.api.repositories;
 
 import ru.aston.model.Employee;
 
+import java.util.UUID;
+
 public interface EmployeeRepository {
 
-    Employee findEmployeeById(Long id);
+    Employee findEmployeeByUuid(UUID uuid);
 }

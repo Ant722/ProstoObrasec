@@ -1,10 +1,12 @@
 package ru.aston.exception;
 
+import java.util.UUID;
+
 public class EmployeeNotFoundException extends RuntimeException{
 
-    public static final String EMPLOYEE_NOT_FOUND_BY_ID = "Account for employee with id %d not found";
+    public static final String EMPLOYEE_NOT_FOUND_BY_UUID = "Account for employee with UUID %s not found";
 
-    public EmployeeNotFoundException(Long id) {
-        super(String.format(EMPLOYEE_NOT_FOUND_BY_ID, id));
+    public EmployeeNotFoundException(UUID uuid) {
+        super(String.format(EMPLOYEE_NOT_FOUND_BY_UUID, uuid));
     }
 }

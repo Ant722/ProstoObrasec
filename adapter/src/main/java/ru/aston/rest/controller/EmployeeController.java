@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aston.dto.responce.EmployeeInformationDto;
+import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.facade.EmployeeFacade;
+
+import static ru.aston.util.ValidationConstants.UUID_PATTERN;
 
 @RequestMapping("api/v1/employee")
 @Tag(name = "Employee Controller", description = "controller for working with employees")
@@ -47,8 +49,10 @@ public class EmployeeController {
                             description = "Internal server error",
                             content = @Content)
             })
-    @GetMapping("/{id}")
-    public ResponseEntity<EmployeeInformationDto> getEmployeeInformationById(@PathVariable @Min(0) Long id) {
-        return ResponseEntity.ok(employeeFacade.getEmployeeInformationById(id));
+    @GetMapping("/{uuid}")
+    public ResponseEntity<EmployeeInformationDto> getEmployeeInformationByUuid(
+            @PathVariable
+            @Pattern(regexp = UUID_PATTERN) String uuid) {
+        return ResponseEntity.ok(employeeFacade.getEmployeeInformationByUuid(uuid));
     }
 }

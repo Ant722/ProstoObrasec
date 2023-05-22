@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.aston.dto.responce.EmployeeInformationDto;
+import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.model.Employee;
 import ru.aston.model.Role;
 import ru.aston.model.Status;

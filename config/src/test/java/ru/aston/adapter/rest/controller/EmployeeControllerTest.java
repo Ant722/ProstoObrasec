@@ -48,7 +48,10 @@ class EmployeeControllerTest {
         return Stream.of(
                 "-9",
                 "abc",
-                "122q1");
+                "122q1",
+                "100",
+                "fc581e6g-f87e-11ed-b67e-0242ac120002",
+                "fc581e6e-f87e-11ed-b67e-0242ac1200021");
     }
 
     private MockMvc getMockMvc(){

@@ -7,6 +7,8 @@ import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.model.Employee;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -15,9 +17,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     @Override
-    public Employee getEmployeeById(Long id) {
-        Employee employee = employeeRepository.findEmployeeById(id);
-        log.info("Taken from database employee with ID {}", employee.getId());
+    public Employee getEmployeeByUuid(UUID uuid) {
+        Employee employee = employeeRepository.findEmployeeByUuid(uuid);
+        log.info("Taken from database employee with UUID {}", employee.getUuid());
         return employee;
     }
 }

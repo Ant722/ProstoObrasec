@@ -3,8 +3,10 @@ package ru.aston.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.aston.app.api.services.EmployeeService;
-import ru.aston.dto.responce.EmployeeInformationDto;
+import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.mapper.EmployeeMapper;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -14,7 +16,8 @@ public class EmployeeFacade {
 
     private final EmployeeMapper employeeMapper;
 
-    public EmployeeInformationDto getEmployeeInformationById(Long id) {
-        return employeeMapper.mapEmployeeToEmployeeInformationDto(employeeService.getEmployeeById(id));
+    public EmployeeInformationDto getEmployeeInformationByUuid(String uuid) {
+        return employeeMapper.mapEmployeeToEmployeeInformationDto(
+                employeeService.getEmployeeByUuid(UUID.fromString(uuid)));
     }
 }

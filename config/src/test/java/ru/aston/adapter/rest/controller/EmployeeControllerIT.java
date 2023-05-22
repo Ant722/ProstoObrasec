@@ -15,10 +15,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class EmployeeControllerIT extends AbstractIntegrationTest {
 
-    private static final String EMPLOYEE_INFORMATION_ENDPOINT = "/api/v1/employee/{id}";
+    private static final String EMPLOYEE_INFORMATION_ENDPOINT = "/api/v1/employee/{uuid}";
 
-    private static final Long EXISTED_EMPLOYEE_ID = 1L;
-    private static final Long NOT_EXISTED_EMPLOYEE_ID = 2L;
+    private static final String EXISTED_EMPLOYEE_UUID = "9771203f-be0a-4ecf-9ed7-72978a35d201";
+    private static final String NOT_EXISTED_EMPLOYEE_UUID = "9771203f-be0a-4ecf-9ed7-72978a35d202";
 
     @Autowired
     MockMvc mockMvc;
@@ -26,7 +26,7 @@ class EmployeeControllerIT extends AbstractIntegrationTest {
     @Test
     @Sql("classpath:sql/employeeController/getEmployeeInformationById.sql")
     void getEmployeeInformationById_Should_Return200_WhenExistedEmployee() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(EMPLOYEE_INFORMATION_ENDPOINT, EXISTED_EMPLOYEE_ID))
+        mockMvc.perform(MockMvcRequestBuilders.get(EMPLOYEE_INFORMATION_ENDPOINT, EXISTED_EMPLOYEE_UUID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.surname").value("Ivanov"))
                 .andExpect(jsonPath("$.name").value("Ivan"))
@@ -44,8 +44,8 @@ class EmployeeControllerIT extends AbstractIntegrationTest {
     @Sql("classpath:sql/employeeController/getEmployeeInformationById.sql")
     void getEmployeeInformationById_Should_Return404_WhenNotExistedEmployee() throws Exception {
         String expectedErrorMessage =
-                String.format(EmployeeNotFoundException.EMPLOYEE_NOT_FOUND_BY_ID, NOT_EXISTED_EMPLOYEE_ID);
-        mockMvc.perform(MockMvcRequestBuilders.get(EMPLOYEE_INFORMATION_ENDPOINT, NOT_EXISTED_EMPLOYEE_ID))
+                String.format(EmployeeNotFoundException.EMPLOYEE_NOT_FOUND_BY_UUID, NOT_EXISTED_EMPLOYEE_UUID);
+        mockMvc.perform(MockMvcRequestBuilders.get(EMPLOYEE_INFORMATION_ENDPOINT, NOT_EXISTED_EMPLOYEE_UUID))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage").value(expectedErrorMessage));
     }

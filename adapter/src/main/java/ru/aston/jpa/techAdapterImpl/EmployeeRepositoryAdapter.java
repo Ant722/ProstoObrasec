@@ -7,6 +7,8 @@ import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.jpa.repositories.EmployeeJpaRepository;
 import ru.aston.model.Employee;
 
+import java.util.UUID;
+
 @Repository
 @RequiredArgsConstructor
 public class EmployeeRepositoryAdapter implements EmployeeRepository {
@@ -14,10 +16,10 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     private final EmployeeJpaRepository employeeJpaRepository;
 
     @Override
-    public Employee findEmployeeById(Long id) {
-        return employeeJpaRepository.findById(id)
+    public Employee findEmployeeByUuid(UUID uuid) {
+        return employeeJpaRepository.findByUuid(uuid)
                 .orElseThrow(() -> {
-                    throw new EmployeeNotFoundException(id);
+                    throw new EmployeeNotFoundException(uuid);
                 });
     }
 }

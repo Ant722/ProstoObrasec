@@ -2,7 +2,9 @@ package ru.aston.app.api.services;
 
 import ru.aston.model.Employee;
 
+import java.util.UUID;
+
 public interface EmployeeService {
 
-    Employee getEmployeeById(Long id);
+    Employee getEmployeeByUuid(UUID uuid);
 }

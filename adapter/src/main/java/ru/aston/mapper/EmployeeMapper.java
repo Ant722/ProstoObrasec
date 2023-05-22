@@ -2,7 +2,7 @@ package ru.aston.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.aston.dto.responce.EmployeeInformationDto;
+import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.model.Employee;
 
 import java.time.Instant;

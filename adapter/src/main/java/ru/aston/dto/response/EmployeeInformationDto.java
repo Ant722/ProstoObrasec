@@ -1,4 +1,4 @@
-package ru.aston.dto.responce;
+package ru.aston.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
