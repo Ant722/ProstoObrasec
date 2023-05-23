@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
-class EmployeeControllerIT extends AbstractIntegrationTest {
+class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
 
     private static final String EMPLOYEE_INFORMATION_ENDPOINT = "/api/v1/employee/{uuid}";
 
