@@ -1,0 +1,91 @@
+package ru.aston.handler;
+
+import jakarta.validation.ConstraintViolationException;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.aston.exception.*;
+
+import java.time.Instant;
+
+@RestControllerAdvice
+@Slf4j
+public class DefaultRestExceptionHandler {
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public ResponseEntity<CustomExceptionResponse> handleConstraintViolationException(
+            ConstraintViolationException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(value = EmployeeNotFoundException.class)
+    public ResponseEntity<CustomExceptionResponse> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = EditDeniedException.class)
+    public ResponseEntity<CustomExceptionResponse> handleEditDeniedException(EditDeniedException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = InvalidEmployeeRoleException.class)
+            public ResponseEntity<CustomExceptionResponse> handleEditDeniedException(InvalidEmployeeRoleException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = InvalidEmployeeStatusException.class)
+    public ResponseEntity<CustomExceptionResponse> handleEditDeniedException(InvalidEmployeeStatusException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = RoleNotFoundException.class)
+    public ResponseEntity<CustomExceptionResponse> handleRoleNotFoundException(RoleNotFoundException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = StatusNotFoundException.class)
+    public ResponseEntity<CustomExceptionResponse> handleStatusNotFoundException(StatusNotFoundException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
+    }
+
+    private CustomExceptionResponse handle(Exception ex) {
+        return new CustomExceptionResponse(ex.getMessage());
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class CustomExceptionResponse {
+
+        private final Instant time = Instant.now();
+        private String errorMessage;
+
+        public CustomExceptionResponse(String errorMessage) {
+            this.errorMessage = errorMessage;
+        }
+    }
+}

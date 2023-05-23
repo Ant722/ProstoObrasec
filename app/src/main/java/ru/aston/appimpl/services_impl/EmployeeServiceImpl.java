@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.aston.app.repositories.EmployeeRepository;
 import ru.aston.app.services.EmployeeService;
+import ru.aston.exception.EditDeniedException;
 import ru.aston.model.Employee;
 import ru.aston.model.enumeration.EmployeeRole;
 
@@ -21,18 +22,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee.getRole().getName().equals(EmployeeRole.ADMIN)) {
             return true;
         } else {
-            throw new RuntimeException("You have no admin rights");
-
-            // todo replace to A-Money Exception
+            throw new EditDeniedException();
         }
     }
 
     @Override
-    public boolean updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin) {
+    public boolean updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId) {
         validAdminByUuid(uuidForCheckAdmin);
-        System.out.println("From EmployeeServiceImpl1" + employee.getLogin());
-        Employee employeeToUpdate = employeeRepository.findEmployeeByLogin(employee.getLogin());
-        System.out.println("From EmployeeServiceImpl2" + employeeToUpdate.getLogin());
+        Employee employeeToUpdate = employeeRepository.findEmployeeById(employeeId);
+        employeeToUpdate.setStatus(employee.getStatus());
+        employeeToUpdate.setRole(employee.getRole());
+        employeeToUpdate.setName(employee.getName());
+        employeeToUpdate.setMiddleName(employee.getMiddleName());
+        employeeToUpdate.setSurname(employee.getSurname());
+        employeeToUpdate.setLogin(employee.getLogin());
+        employeeToUpdate.setPassportId(employee.getPassportId());
+        employeeToUpdate.setPassportDateIssue(employee.getPassportDateIssue());
+        employeeRepository.save(employeeToUpdate);
         return false;
     }
 }

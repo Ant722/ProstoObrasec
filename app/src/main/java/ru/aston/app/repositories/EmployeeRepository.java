@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public interface EmployeeRepository {
 
+    Employee findEmployeeById(Long id);
+
     Employee findEmployeeByUuid(UUID uuid);
 
-    Employee findEmployeeByLogin(String login);
+    Employee save(Employee employee);
 }

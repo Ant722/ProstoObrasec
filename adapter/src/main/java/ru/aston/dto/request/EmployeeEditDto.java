@@ -52,8 +52,4 @@ public class EmployeeEditDto {
     /**Passport date issue of edited employee. Can't be null or empty*/
     @NotBlank
     private String passportDateIssue;
-
-    /**E-mail of edited employee. Can't be null or empty*/
-//    @NotBlank
-//    private String email;
 }

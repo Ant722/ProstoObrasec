@@ -3,7 +3,11 @@ package ru.aston.mapper;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import ru.aston.dto.request.EmployeeEditDto;
+import ru.aston.exception.InvalidEmployeeRoleException;
+import ru.aston.exception.InvalidEmployeeStatusException;
 import ru.aston.model.Employee;
+import ru.aston.model.Role;
+import ru.aston.model.Status;
 import ru.aston.model.enumeration.EmployeeRole;
 import ru.aston.model.enumeration.EmployeeStatus;
 
@@ -14,30 +18,28 @@ public interface EmployeeMapper {
 
     @Mappings({
             @Mapping(source = "employeeEditDto.employeeId", target = "id"),
-            @Mapping(source = "employeeEditDto.statusId", target = "status.name", qualifiedByName = "mapStatus"),
-            @Mapping(source = "employeeEditDto.roleId", target = "role.name", qualifiedByName = "employeeRole"),
+            @Mapping(source = "employeeEditDto.statusId", target = "status", qualifiedByName = "mapStatus"),
+            @Mapping(source = "employeeEditDto.roleId", target = "role", qualifiedByName = "employeeRole"),
             @Mapping(source = "employeeEditDto.passport", target = "passportId"),
             @Mapping(source = "employeeEditDto.passportDateIssue", target = "passportDateIssue", dateFormat = "dd.MM.yyyy")
     })
     Employee mapEmployeeEditDtoToEmployee(EmployeeEditDto employeeEditDto);
 
     @Named("mapStatus")
-    default EmployeeStatus mapStatus(Integer value) {
+    default Status mapStatus(Integer value) {
         if (value - 1 > EmployeeStatus.values().length) {
-            throw new RuntimeException("Status id is invalid");
-            // todo replace with A-money Exception
+            throw new InvalidEmployeeStatusException(value);
         }
         EmployeeStatus[] employeeStatuses = EmployeeStatus.values();
-        return employeeStatuses[value - 1];
+        return new Status(value, employeeStatuses[value - 1]);
     }
 
     @Named("employeeRole")
-    default EmployeeRole mapRole(Integer value) {
+    default Role mapRole(Integer value) {
         if (value - 1 > EmployeeRole.values().length) {
-            throw new RuntimeException("Role id is invalid");
-            // todo replace with A-money Exception
+            throw new InvalidEmployeeRoleException(value);
         }
         EmployeeRole[] employeeRoles = EmployeeRole.values();
-        return employeeRoles[value - 1];
+        return new Role(value, employeeRoles[value - 1]);
     }
 }

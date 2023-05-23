@@ -31,4 +31,12 @@ public class Status {
     @Column(name = "status_name")
     @Enumerated(EnumType.STRING)
     private EmployeeStatus name;
+
+    @Override
+    public String toString() {
+        return "Status{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
+    }
 }

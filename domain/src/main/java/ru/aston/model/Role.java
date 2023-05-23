@@ -34,4 +34,12 @@ public class Role {
     @Column(name = "role_name")
     @Enumerated(EnumType.STRING)
     private EmployeeRole name;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
+    }
 }
