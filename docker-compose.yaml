@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  admin-service:
+    image: $AND_DOCKER_REGISTRY_NAME/$PROJECT-$APP:$CI_COMMIT_BRANCH
+    container_name: $APP
+    restart: on-failure
+    environment:
+      - EUREKA_URL=http://eureka-service:8083/eureka
+      - SPRING_DATASOURCE_USERNAME=amoney
+      - SPRING_DATASOURCE_PASSWORD=amoneypass
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-java:5432/admin-service
+    ports:
+      - "8086:8086"
+    networks:
+      - admin
+
+networks:
+  admin:
+    name: a-money
+
+
