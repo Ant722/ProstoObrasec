@@ -9,6 +9,8 @@ import ru.aston.model.Employee;
 
 import java.util.UUID;
 
+/**EmployeeRepositoryAdapter that implements EmployeeRepository and throws specific exceptions.
+ * Uses EmployeeJpaRepisitory methods inside*/
 @Repository
 @AllArgsConstructor
 public class EmployeeRepositoryAdapter implements EmployeeRepository {

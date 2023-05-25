@@ -2,8 +2,10 @@ package ru.aston.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import ru.aston.util.ValidationConstants;
 
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ public class EmployeeEditDto {
 
     /**Admin's uuid for validation. Can't be null or empty*/
     @NotNull
+    @Pattern(regexp = ValidationConstants.UUID_PATTERN)
     private UUID uuid;
 
     /**Id of edited employee. Can't be null and must be > 0*/

@@ -6,5 +6,4 @@ import lombok.experimental.UtilityClass;
 public class ValidationConstants {
 
     public static final String UUID_PATTERN = "[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}";
-//    public static final String PASSPORT_PATTERN
 }

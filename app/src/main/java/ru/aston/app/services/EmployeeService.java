@@ -6,7 +6,5 @@ import java.util.UUID;
 
 public interface EmployeeService {
 
-    boolean validAdminByUuid(UUID uuidForCheckAdmin);
-
-    boolean updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId);
+    void updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId);
 }
