@@ -4,7 +4,7 @@ services:
   admin-service:
     image: $AND_DOCKER_REGISTRY_NAME/$PROJECT-$APP:$CI_COMMIT_BRANCH
     container_name: $APP
-    restart: on-failure
+    restart: always
     environment:
       - EUREKA_URL=http://eureka-service:8083/eureka
       - SPRING_DATASOURCE_USERNAME=amoney
