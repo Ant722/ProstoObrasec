@@ -93,6 +93,7 @@ public class Employee {
      * @see EmployeeRole
      */
     @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
     /**
@@ -101,6 +102,7 @@ public class Employee {
      * @see EmployeeStatus
      */
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EmployeeStatus status;
 
     /**
