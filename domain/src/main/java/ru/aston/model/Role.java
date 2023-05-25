@@ -10,7 +10,6 @@ import ru.aston.model.enumeration.EmployeeRole;
 
 
 @Entity
-@Table(name = "role")
 @Getter
 @Setter
 @AllArgsConstructor

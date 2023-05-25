@@ -8,7 +8,6 @@ import lombok.Setter;
 import ru.aston.model.enumeration.EmployeeStatus;
 
 @Entity
-@Table(name = "status")
 @Getter
 @Setter
 @AllArgsConstructor
