@@ -10,25 +10,16 @@ import ru.aston.model.enumeration.EmployeeRole;
 
 import java.util.UUID;
 
+/**Service class for Employee. Contains different operations for actions with employees*/
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     EmployeeRepository employeeRepository;
 
+    /**Calls validAdminByUuid to check admin's rights,new Employee data and edits Employee in DB*/
     @Override
-    public boolean validAdminByUuid(UUID uuidForCheckAdmin) {
-        Employee employee = employeeRepository.findEmployeeByUuid(uuidForCheckAdmin);
-        if (employee.getRole().getName().equals(EmployeeRole.ADMIN)) {
-            return true;
-        } else {
-            throw new EditDeniedException();
-        }
-    }
-
-    @Override
-    public boolean updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId) {
-        validAdminByUuid(uuidForCheckAdmin);
+    public void updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId) {
         Employee employeeToUpdate = employeeRepository.findEmployeeById(employeeId);
         employeeToUpdate.setStatus(employee.getStatus());
         employeeToUpdate.setRole(employee.getRole());
@@ -39,6 +30,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeToUpdate.setPassportId(employee.getPassportId());
         employeeToUpdate.setPassportDateIssue(employee.getPassportDateIssue());
         employeeRepository.save(employeeToUpdate);
-        return false;
     }
 }

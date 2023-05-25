@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ru.aston.model.enumeration.EmployeeRole;
+import ru.aston.model.enumeration.EmployeeStatus;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -25,14 +27,15 @@ public class Employee {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
+    @Column(name = "id")
     private Long id;
 
     /**
      * UUID of employee. Used to connect to other services.
      * Must be unique and not null.
      */
-    @Column(name = "employee_uuid", nullable = false, unique = true)
+
+    @Column(name = "uuid", nullable = false, unique = true)
     private UUID uuid;
 
     /**
@@ -76,8 +79,9 @@ public class Employee {
      * Identification number of employees passport.
      * Can not be null.
      */
-    @Column(name = "passport_ID", nullable = false)
-    private Long passportId;
+
+    @Column(name = "passport_id", nullable = false)
+    private String passportId;
 
     /**
      * Employee passport issued date.
@@ -87,22 +91,22 @@ public class Employee {
     private LocalDate passportDateIssue;
 
     /**
-     * Reference to employee role.
-     *
-     * @see Role
+     * Employee role.
+     * Can not be null.
+     * @see EmployeeRole
      */
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EmployeeRole role;
 
     /**
-     * Reference to employee status.
-     *
-     * @see Status
+     * Employee status.
+     * Can not be null.
+     * @see EmployeeStatus
      */
-    @ManyToOne
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EmployeeStatus status;
 
     /**
      * Time of creation. Represent as a timestamp.
@@ -117,23 +121,4 @@ public class Employee {
     @Column(name = "modified_at")
     @UpdateTimestamp
     private Instant modifiedAt;
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", uuid=" + uuid +
-                ", surname='" + surname + '\'' +
-                ", name='" + name + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", passportId=" + passportId +
-                ", passportDateIssue=" + passportDateIssue +
-                ", role=" + role +
-                ", status=" + status +
-                ", createdAt=" + createdAt +
-                ", modifiedAt=" + modifiedAt +
-                '}';
-    }
 }
