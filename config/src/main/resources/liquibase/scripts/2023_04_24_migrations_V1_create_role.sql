@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS role (
-    role_id BIGSERIAL PRIMARY KEY,
-    role_name VARCHAR(20)
-);
