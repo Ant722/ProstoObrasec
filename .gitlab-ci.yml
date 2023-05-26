@@ -2,8 +2,6 @@ include:
   - project: 'rvaliev/devops'
     ref: main
     file:
-      - 'templates/build-template.yml'
-      - 'templates/deploy-template.yml'
       - 'templates/sonar-template.yml'
 
 stages:

@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/scripts/2023_05_24_migrations_V1_create_employee_table.sql
+encoding: "UTF-8"
