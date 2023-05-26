@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.aston.app.repositories.EmployeeRepository;
 import ru.aston.app.services.EmployeeService;
-import ru.aston.exception.EditDeniedException;
 import ru.aston.model.Employee;
-import ru.aston.model.enumeration.EmployeeRole;
 
 import java.util.UUID;
 
@@ -17,7 +15,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     EmployeeRepository employeeRepository;
 
-    /**Calls validAdminByUuid to check admin's rights,new Employee data and edits Employee in DB*/
+    /**Accepts employee data to edit and edits Employee in DB*/
+
     @Override
     public void updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId) {
         Employee employeeToUpdate = employeeRepository.findEmployeeById(employeeId);
