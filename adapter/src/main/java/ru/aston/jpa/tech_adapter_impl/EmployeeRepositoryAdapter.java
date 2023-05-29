@@ -25,6 +25,12 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
+    public Employee findEmployeeByLogin(String login) {
+        return employeeJpaRepository.findEmployeeByLogin(login)
+                .orElseThrow(() -> new EmployeeNotFoundException(login));
+    }
+
+    @Override
     public Employee findEmployeeByUuid(UUID uuid) {
         return employeeJpaRepository.findEmployeeByUuid(uuid)
                 .orElseThrow(() -> new EmployeeNotFoundException(uuid));

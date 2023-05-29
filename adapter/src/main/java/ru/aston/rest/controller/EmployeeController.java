@@ -42,6 +42,10 @@ public class EmployeeController {
                     description = "Not found",
                     content = @Content),
             @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict",
+                    content = @Content),
+            @ApiResponse(
                     responseCode = "500",
                     description = "INTERNAL SERVER ERROR",
                     content = @Content)}

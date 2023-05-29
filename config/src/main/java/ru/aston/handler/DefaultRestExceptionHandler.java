@@ -33,6 +33,14 @@ public class DefaultRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
     }
 
+    @ExceptionHandler(value = LoginConflictException.class)
+    public ResponseEntity<CustomExceptionResponse> handleLoginConflictException(LoginConflictException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
     private CustomExceptionResponse handle(Exception ex) {
         return new CustomExceptionResponse(ex.getMessage());
     }
