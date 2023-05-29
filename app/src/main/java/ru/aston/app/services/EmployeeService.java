@@ -7,5 +7,6 @@ import java.util.UUID;
 /**Service interface for Employee. Contains different operations for actions with employees.*/
 public interface EmployeeService {
 
+    Employee findEmployeeByLogin(String login);
     void updateEmployeeInfo(Employee employee, UUID uuid);
 }
