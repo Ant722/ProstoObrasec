@@ -19,7 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getEmployeeByUuid(UUID uuid) {
         Employee employee = employeeRepository.findEmployeeByUuid(uuid);
-        log.info("Taken from database employee with UUID {}", employee.getUuid());
+        log.info("Taken from employee with UUID {}", employee.getUuid());
         return employee;
     }
 }
