@@ -14,7 +14,7 @@ public interface EmployeeMapper {
 
     String DATE_PATTERN_FORMAT = "dd.MM.yyyy";
 
-    @Mapping(source = "passportDateIssue", target = "passportDateIssue", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "passportDateIssue", target = "passportDateIssue", dateFormat = DATE_PATTERN_FORMAT)
     EmployeeInformationDto mapEmployeeToEmployeeInformationDto(Employee employee);
 
     default String mapInstantToStringDate(Instant instant) {
