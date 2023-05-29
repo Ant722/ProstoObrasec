@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import ru.aston.model.enumeration.EmployeeRole;
+import ru.aston.model.enumeration.EmployeeStatus;
 import ru.aston.util.ValidationConstants;
 
 import java.util.UUID;
@@ -16,22 +18,13 @@ import java.util.UUID;
 @Data
 public class EmployeeEditDto {
 
-    /**Admin's uuid for validation. Can't be null or empty*/
+    /**Status id of edited employee. Can't be null or empty*/
     @NotNull
-    @Pattern(regexp = ValidationConstants.UUID_PATTERN)
-    private UUID uuid;
+    private EmployeeStatus status;
 
-    /**Id of edited employee. Can't be null and must be > 0*/
-    @Positive
-    private Long employeeId;
-
-    /**Status id of edited employee. Can't be null and must be > 0*/
-    @Positive
-    private Integer statusId;
-
-    /**Role id of edited employee. Can't be null and must be > 0*/
-    @Positive
-    private Integer roleId;
+    /**Role id of edited employee. Can't be null or empty*/
+    @NotNull
+    private EmployeeRole role;
 
     /**Name of edited employee. Can't be null or empty*/
     @NotBlank
