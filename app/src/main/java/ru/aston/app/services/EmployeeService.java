@@ -4,7 +4,8 @@ import ru.aston.model.Employee;
 
 import java.util.UUID;
 
+/**Service interface for Employee. Contains different operations for actions with employees.*/
 public interface EmployeeService {
 
-    void updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId);
+    void updateEmployeeInfo(Employee employee, UUID uuid);
 }

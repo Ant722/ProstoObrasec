@@ -9,7 +9,8 @@ import ru.aston.model.Employee;
 
 import java.util.UUID;
 
-/**Contains different logics for operations with Employee between controllers and services*/
+/**Contains different logics for operations with Employee between controllers and services
+ * @see EmployeeService*/
 @Component
 @AllArgsConstructor
 public class EmployeeFacade {
@@ -17,12 +18,9 @@ public class EmployeeFacade {
     private EmployeeService employeeService;
     private EmployeeMapper employeeMapper;
 
-    /**Accepts EmployeeEditDto and Employee id, separates UUID from dto for validating it as admin's.*/
-    // todo possible to accept employee's UUID in future (depends of analytics)
-    public void updateEmployeeInfo(EmployeeEditDto employeeEditDto, Long employeeId) {
+    /**Accepts EmployeeEditDto and Employee uuid. Maps it to Employee and calls Employee update method from service*/
+    public void updateEmployeeInfo(EmployeeEditDto employeeEditDto, UUID uuid) {
         Employee employee = employeeMapper.mapEmployeeEditDtoToEmployee(employeeEditDto);
-        UUID uuidForCheckAdmin = employeeEditDto.getUuid();
-        employee.setUuid(null);
-        employeeService.updateEmployeeInfo(employee, uuidForCheckAdmin, employeeId);
+        employeeService.updateEmployeeInfo(employee, uuid);
     }
 }

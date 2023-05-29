@@ -33,46 +33,6 @@ public class DefaultRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
     }
 
-    @ExceptionHandler(value = EditDeniedException.class)
-    public ResponseEntity<CustomExceptionResponse> handleEditDeniedException(EditDeniedException ex) {
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
-    }
-
-    @ExceptionHandler(value = InvalidEmployeeRoleException.class)
-            public ResponseEntity<CustomExceptionResponse> handleEditDeniedException(InvalidEmployeeRoleException ex) {
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
-    }
-
-    @ExceptionHandler(value = InvalidEmployeeStatusException.class)
-    public ResponseEntity<CustomExceptionResponse> handleEditDeniedException(InvalidEmployeeStatusException ex) {
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
-    }
-
-    @ExceptionHandler(value = RoleNotFoundException.class)
-    public ResponseEntity<CustomExceptionResponse> handleRoleNotFoundException(RoleNotFoundException ex) {
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
-    }
-
-    @ExceptionHandler(value = StatusNotFoundException.class)
-    public ResponseEntity<CustomExceptionResponse> handleStatusNotFoundException(StatusNotFoundException ex) {
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
-    }
-
     private CustomExceptionResponse handle(Exception ex) {
         return new CustomExceptionResponse(ex.getMessage());
     }

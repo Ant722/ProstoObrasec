@@ -16,10 +16,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     EmployeeRepository employeeRepository;
 
     /**Accepts employee data to edit and edits Employee in DB*/
-
     @Override
-    public void updateEmployeeInfo(Employee employee, UUID uuidForCheckAdmin, Long employeeId) {
-        Employee employeeToUpdate = employeeRepository.findEmployeeById(employeeId);
+    public void updateEmployeeInfo(Employee employee, UUID uuid) {
+        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         employeeToUpdate.setStatus(employee.getStatus());
         employeeToUpdate.setRole(employee.getRole());
         employeeToUpdate.setName(employee.getName());

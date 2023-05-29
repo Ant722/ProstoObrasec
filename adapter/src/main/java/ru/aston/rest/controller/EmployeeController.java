@@ -6,17 +6,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.aston.dto.request.EmployeeEditDto;
 import ru.aston.facade.EmployeeFacade;
 
-@Tag(name = "Employee edit controller", description = "Controller edits employee data in DB")
+import java.util.UUID;
+
+import static ru.aston.util.ValidationConstants.UUID_PATTERN;
+
+@Tag(name = "Employee controller", description = "Controller accepts requests for different actions with employee data in DB")
 @RestController
-@RequestMapping("api/v1/admin")
+@RequestMapping("api/v1/employee")
 @RequiredArgsConstructor
-public class EmployeeEditController {
+public class EmployeeController {
 
     private final EmployeeFacade employeeFacade;
 
@@ -42,13 +47,14 @@ public class EmployeeEditController {
                     content = @Content)}
     )
 
-    @PutMapping("/employee/{employee_id}")
+    @PutMapping("/{employee_uuid}")
     public ResponseEntity<Void> editEmployee(
-            @PathVariable(value = "employee_id") Long employeeId,
+            @Pattern(regexp = UUID_PATTERN)
+            @PathVariable(value = "employee_uuid") UUID uuid,
             @Valid
             @RequestBody EmployeeEditDto dto
             ) {
-        employeeFacade.updateEmployeeInfo(dto, employeeId);
+        employeeFacade.updateEmployeeInfo(dto, uuid);
         return ResponseEntity.ok().build();
     }
 }

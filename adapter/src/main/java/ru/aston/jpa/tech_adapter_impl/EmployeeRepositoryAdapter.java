@@ -11,7 +11,8 @@ import java.util.UUID;
 
 /**EmployeeRepositoryAdapter that implements EmployeeRepository and throws specific exceptions.
  * Uses EmployeeJpaRepisitory methods inside
- * @see EmployeeRepository */
+ * @see EmployeeRepository
+ * @see EmployeeJpaRepository*/
 @Repository
 @AllArgsConstructor
 public class EmployeeRepositoryAdapter implements EmployeeRepository {
@@ -21,12 +22,6 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     @Override
     public Employee save(Employee employee) {
         return employeeJpaRepository.save(employee);
-    }
-
-    @Override
-    public Employee findEmployeeById(Long id) {
-        return employeeJpaRepository.findEmployeeById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
     @Override

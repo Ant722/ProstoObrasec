@@ -8,8 +8,6 @@ import java.util.UUID;
  * (like EmployeeNotFound etc).*/
 public interface EmployeeRepository {
 
-    Employee findEmployeeById(Long id);
-
     Employee findEmployeeByUuid(UUID uuid);
 
     Employee save(Employee employee);
