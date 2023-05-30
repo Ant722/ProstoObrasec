@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  postgres-admin:
+    image: "postgres:12.3"
+    container_name: admin-services
+    environment:
+      - POSTGRES_DB=A-money
+      - POSTGRES_PASSWORD=amoneypass
+      - POSTGRES_USER=amoney
+    ports:
+      - 5435:5432
+    volumes:
+      - verification-postgres:/var/lib/postgresql/data
+    networks:
+      - postgres
+networks:
+  deposit:
+    name: a-money
+  postgres:
+    name: a-money
+
+volumes:
+  verification-postgres:

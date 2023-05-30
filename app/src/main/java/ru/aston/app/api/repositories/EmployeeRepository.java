@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface EmployeeRepository {
 
     Employee findEmployeeByUuid(UUID uuid);
+
+    void save(Employee employee);
 }

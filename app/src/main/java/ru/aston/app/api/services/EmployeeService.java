@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface EmployeeService {
 
     Employee getEmployeeByUuid(UUID uuid);
+
+     Employee generatePasswordByUuid(UUID uuid);
 }

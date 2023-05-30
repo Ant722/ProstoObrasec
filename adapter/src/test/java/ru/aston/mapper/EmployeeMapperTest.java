@@ -1,5 +1,6 @@
 package ru.aston.mapper;
 
+import ch.qos.logback.core.status.Status;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -8,11 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.model.Employee;
-import ru.aston.model.Role;
-import ru.aston.model.Status;
 import ru.aston.model.enumeration.EmployeeRole;
 import ru.aston.model.enumeration.EmployeeStatus;
 
+import javax.management.relation.Role;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -40,10 +40,10 @@ class EmployeeMapperTest {
         employee.setName("Ivan");
         employee.setMiddleName("Ivanovich");
         employee.setLogin("employeeLogin");
-        employee.setPassportId(100L);
+        employee.setPassportId("100");
         employee.setPassportDateIssue(LocalDate.of(2023, 1, 1));
-        employee.setRole(new Role(1L, EmployeeRole.ADMIN));
-        employee.setStatus(new Status(1L, EmployeeStatus.ACTIVE));
+        employee.setRole(EmployeeRole.ADMIN);
+        employee.setStatus(EmployeeStatus.ACTIVE);
         employee.setCreatedAt(Instant.parse("2023-02-02T12:00:00.00Z"));
         employee.setModifiedAt(Instant.parse("2023-03-03T12:00:00.00Z"));
         return employee;

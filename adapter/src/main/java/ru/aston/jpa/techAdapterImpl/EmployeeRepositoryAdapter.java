@@ -22,4 +22,9 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
                     throw new EmployeeNotFoundException(uuid);
                 });
     }
+
+    @Override
+    public void save(Employee employee) {
+        employeeJpaRepository.save(employee);
+    }
 }
