@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.aston.dto.request.EmployeeEditDto;
+import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.facade.EmployeeFacade;
 
 import java.util.UUID;
@@ -26,12 +26,12 @@ public class EmployeeController {
     private final EmployeeFacade employeeFacade;
 
     @Operation(
-            summary = "Employee editing"
+            summary = "Employee data updating"
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Employee successfully edited",
+                    description = "Employee successfully updated",
                     content = @Content),
             @ApiResponse(
                     responseCode = "400",
@@ -52,12 +52,12 @@ public class EmployeeController {
     )
 
     @PutMapping("/{employee_uuid}")
-    public ResponseEntity<Void> editEmployee(
+    public ResponseEntity<Void> updateEmployee(
             @Pattern(regexp = UUID_PATTERN)
             @PathVariable(value = "employee_uuid") UUID uuid,
             @Valid
-            @RequestBody EmployeeEditDto dto
-            ) {
+            @RequestBody EmployeeUpdateDto dto
+    ) {
         employeeFacade.updateEmployeeInfo(dto, uuid);
         return ResponseEntity.ok().build();
     }

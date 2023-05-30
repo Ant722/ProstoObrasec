@@ -11,21 +11,23 @@ import ru.aston.model.Employee;
 
 import java.util.UUID;
 
-/**Service class for Employee. Contains different operations for actions with employees*/
+/**
+ * Service class for Employee. Contains different operations for actions with employees
+ */
 @Slf4j
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
-
-    @Override
-    public Employee findEmployeeByLogin(String login) {
+    private Employee findEmployeeByLogin(String login) {
         return employeeRepository.findEmployeeByLogin(login);
     }
 
-    /**Accepts employee data to edit and edits Employee in DB. Checks login uniqueness before editing*/
+    /**
+     * Accepts employee data to update and updates Employee in DB. Checks login uniqueness before updating
+     */
     @Override
     public void updateEmployeeInfo(Employee employee, UUID uuid) {
         try {
@@ -34,7 +36,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                         "belongs to another employee", uuid, employee.getLogin());
                 throw new LoginConflictException();
             }
-        } catch (EmployeeNotFoundException ignored) {}
+        } catch (EmployeeNotFoundException ignored) {
+        }
         Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         employeeToUpdate.setStatus(employee.getStatus());
         employeeToUpdate.setRole(employee.getRole());
