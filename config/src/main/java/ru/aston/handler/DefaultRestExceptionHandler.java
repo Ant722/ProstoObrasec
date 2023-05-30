@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.aston.exception.*;
+import ru.aston.exception.EmployeeNotFoundException;
+import ru.aston.exception.LoginConflictException;
 
 import java.time.Instant;
 
