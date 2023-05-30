@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.response.EmployeeInformationDto;
+import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.facade.EmployeeFacade;
 
 import static ru.aston.util.ValidationConstants.UUID_PATTERN;
@@ -54,5 +56,32 @@ public class EmployeeController {
             @PathVariable
             @Pattern(regexp = UUID_PATTERN) String uuid) {
         return ResponseEntity.ok(employeeFacade.getEmployeeInformationByUuid(uuid));
+    }
+
+    @Operation(
+            summary = "View employee information",
+            description = "Allows to get information of the employee")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "The information of the employee has successfully returned",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid employee id",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Employee not found",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
+                            content = @Content)
+            })
+    @GetMapping
+    public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(EmployeeSearchCriteriaDto dto) {
+        return ResponseEntity.ok(employeeFacade.searchEmployeesByUsername(dto));
     }
 }
