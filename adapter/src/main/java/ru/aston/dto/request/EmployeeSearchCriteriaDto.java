@@ -27,7 +27,7 @@ public class EmployeeSearchCriteriaDto {
     @Schema(description = "String for partial surname match")
     String surname;
 
-    @Min(0)
+    @Min(1)
     @Schema(description = "Current page")
     Integer page;
 }

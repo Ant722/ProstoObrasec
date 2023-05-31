@@ -9,6 +9,9 @@ import ru.aston.dto.response.PaginationDto;
 @Mapper(componentModel = "spring")
 public interface PaginationMapper {
 
+    /**
+     * Page numbering starts at number 1
+     */
     @Mapping(target = "count", source = "page", qualifiedByName = "getCount")
     @Mapping(target = "pages", source = "page", qualifiedByName = "getPages")
     @Mapping(target = "pageNext", source = "page", qualifiedByName = "getNextPage")
@@ -22,16 +25,16 @@ public interface PaginationMapper {
 
     @Named("getPages")
     default Integer getPageNumber(Page<?> page) {
-        return page.getPageable().getPageNumber();
+        return page.getTotalPages();
     }
 
     @Named("getNextPage")
     default Integer getNextPage(Page<?> page) {
-        return page.hasNext() ? page.getPageable().getPageNumber() + 1 : null;
+        return page.hasNext() ? page.getPageable().getPageNumber() + 2 : null;
     }
 
     @Named("getPrevPage")
     default Integer getPrevPage(Page<?> page) {
-        return page.hasPrevious() ? page.getPageable().getPageNumber() - 1 : null;
+        return page.hasPrevious() ? page.getPageable().getPageNumber() : null;
     }
 }

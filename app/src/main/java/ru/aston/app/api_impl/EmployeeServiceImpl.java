@@ -31,6 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             String sort,
             String surname,
             Integer page) {
-        return employeeRepository.searchEmployeesByUsername(status, role, sort, surname, page);
+        Page<Employee> employeePage = employeeRepository.searchEmployeesByUsername(status, role, sort, surname, page);
+        log.info("Taken from employee {} records, current page is {}", employeePage.getTotalElements(), page);
+        return employeePage;
     }
 }

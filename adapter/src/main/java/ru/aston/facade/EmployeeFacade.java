@@ -23,6 +23,9 @@ public class EmployeeFacade {
                 employeeService.getEmployeeByUuid(UUID.fromString(uuid)));
     }
 
+    /**
+     * Page numbering starts at number 1
+     */
     public SearchEmployeeResultDto searchEmployeesByUsername(EmployeeSearchCriteriaDto dto) {
         return employeeMapper.mapPageToSearchEmployeeResultDto(
                 employeeService.searchEmployeesByUsername(
@@ -30,6 +33,6 @@ public class EmployeeFacade {
                         dto.getRole().name(),
                         dto.getSort(),
                         dto.getSurname(),
-                        dto.getPage()));
+                        dto.getPage() - 1));
     }
 }

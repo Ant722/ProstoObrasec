@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,21 +60,17 @@ public class EmployeeController {
     }
 
     @Operation(
-            summary = "View employee information",
-            description = "Allows to get information of the employee")
+            summary = "Search employees by partial surname match with sort and filter",
+            description = "Allows to get information of the employees")
     @ApiResponses(
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "The information of the employee has successfully returned",
+                            description = "The information of the employees has successfully returned",
                             content = @Content),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Invalid employee id",
-                            content = @Content),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Employee not found",
+                            description = "Invalid request parameters",
                             content = @Content),
                     @ApiResponse(
                             responseCode = "500",
@@ -81,7 +78,7 @@ public class EmployeeController {
                             content = @Content)
             })
     @GetMapping
-    public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(EmployeeSearchCriteriaDto dto) {
+    public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(@Valid EmployeeSearchCriteriaDto dto) {
         return ResponseEntity.ok(employeeFacade.searchEmployeesByUsername(dto));
     }
 }

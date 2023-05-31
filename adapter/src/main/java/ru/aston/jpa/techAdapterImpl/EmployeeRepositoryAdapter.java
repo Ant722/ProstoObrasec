@@ -1,10 +1,13 @@
 package ru.aston.jpa.techAdapterImpl;
 
 import com.querydsl.core.BooleanBuilder;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Repository;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.exception.EmployeeNotFoundException;
@@ -21,6 +24,9 @@ import java.util.UUID;
 public class EmployeeRepositoryAdapter implements EmployeeRepository {
 
     private final EmployeeJpaRepository employeeJpaRepository;
+
+    @Value("${page.default-size}")
+    private int defaultPageSize;
 
     @Override
     public Employee findEmployeeByUuid(UUID uuid) {
@@ -39,8 +45,11 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
                 .and(employee.role.eq(EmployeeRole.valueOf(role)))
                 .and(surname != null ? employee.surname.startsWith(surname) : null);
 
-
-        PageRequest pageRequest = PageRequest.of(page, 30, Sort.Direction.ASC, sort);
-        return employeeJpaRepository.findAll(predicate, pageRequest);
+        PageRequest pageRequest = PageRequest.of(page, defaultPageSize, Sort.Direction.ASC, sort);
+        try {
+            return employeeJpaRepository.findAll(predicate, pageRequest);
+        } catch (PropertyReferenceException e) {
+            throw new ValidationException("Sort field is invalid");
+        }
     }
 }
