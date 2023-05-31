@@ -9,16 +9,13 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import static ru.aston.util.MappingPatterns.DATE_PATTERN_FORMAT;
-
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-    @Mapping(source = "role", target = "role")
-    @Mapping(source = "status", target = "status")
-    @Mapping(source = "passportDateIssue", target = "passportDateIssue", dateFormat = "dd.MM.yyyy")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "modifiedAt", target = "modifiedAt")
+
+    String DATE_PATTERN_FORMAT = "dd.MM.yyyy";
+
+    @Mapping(source = "passportDateIssue", target = "passportDateIssue", dateFormat = DATE_PATTERN_FORMAT)
     EmployeeInformationDto mapEmployeeToEmployeeInformationDto(Employee employee);
 
     default String mapInstantToStringDate(Instant instant) {
