@@ -8,8 +8,17 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${module.version}</version>
     <artifactId>config</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.aston</groupId>
+            <artifactId>adapter</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
