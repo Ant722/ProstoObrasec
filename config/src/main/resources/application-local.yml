@@ -1,0 +1,19 @@
+spring:
+  mail:
+    host: smtp.mail.ru
+    port: 587
+    username: email.testtt@mail.ru
+    password: 4ysZnMd7yafgDDgq0PCU
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    sender: #отправитель письма
+      email: email.testtt@mail.ru
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5435/A-money
+    username: amoney
+    password: amoneypass
