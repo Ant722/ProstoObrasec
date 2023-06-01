@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.model.Employee;
@@ -25,6 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true, timeout = 5)
     public Page<Employee> searchEmployeesByUsername(
             String status,
             String role,
