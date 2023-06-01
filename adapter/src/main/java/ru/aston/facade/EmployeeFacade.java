@@ -1,6 +1,6 @@
 package ru.aston.facade;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.aston.app.services.EmployeeService;
 import ru.aston.dto.request.EmployeeUpdateDto;
@@ -15,11 +15,11 @@ import java.util.UUID;
  * @see EmployeeService
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeFacade {
 
-    private EmployeeService employeeService;
-    private EmployeeMapper employeeMapper;
+    private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
     /**
      * Accepts EmployeeUpdateDto and Employee uuid. Maps it to Employee and calls Employee update method from service

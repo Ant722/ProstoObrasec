@@ -9,15 +9,18 @@ import ru.aston.model.Employee;
 
 import java.util.UUID;
 
-/**EmployeeRepositoryAdapter that implements EmployeeRepository and throws specific exceptions.
+/**
+ * EmployeeRepositoryAdapter that implements EmployeeRepository and throws specific exceptions.
  * Uses EmployeeJpaRepisitory methods inside
+ *
  * @see EmployeeRepository
- * @see EmployeeJpaRepository*/
+ * @see EmployeeJpaRepository
+ */
 @Repository
 @AllArgsConstructor
 public class EmployeeRepositoryAdapter implements EmployeeRepository {
 
-    private EmployeeJpaRepository employeeJpaRepository;
+    private final EmployeeJpaRepository employeeJpaRepository;
 
     @Override
     public Employee save(Employee employee) {

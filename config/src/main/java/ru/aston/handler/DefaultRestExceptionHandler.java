@@ -6,12 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -23,7 +26,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(handle(ex));
     }
 
     @ExceptionHandler(value = EmployeeNotFoundException.class)
@@ -40,6 +43,20 @@ public class DefaultRestExceptionHandler {
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<List<CustomExceptionResponse>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex
+    ) {
+        List<CustomExceptionResponse> messages = ex.getBindingResult().getFieldErrors().stream()
+                .map(msg -> new CustomExceptionResponse(msg.getDefaultMessage()))
+                .collect(Collectors.toList());
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        log.error(messages.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messages);
     }
 
     private CustomExceptionResponse handle(Exception ex) {

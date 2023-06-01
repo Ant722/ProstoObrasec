@@ -21,10 +21,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    private Employee findEmployeeByLogin(String login) {
-        return employeeRepository.findEmployeeByLogin(login);
-    }
-
     /**
      * Accepts employee data to update and updates Employee in DB. Checks login uniqueness before updating
      */
@@ -39,15 +35,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (EmployeeNotFoundException ignored) {
         }
         Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
-        employeeToUpdate.setStatus(employee.getStatus());
-        employeeToUpdate.setRole(employee.getRole());
-        employeeToUpdate.setName(employee.getName());
-        employeeToUpdate.setMiddleName(employee.getMiddleName());
-        employeeToUpdate.setSurname(employee.getSurname());
-        employeeToUpdate.setLogin(employee.getLogin());
-        employeeToUpdate.setPassportId(employee.getPassportId());
-        employeeToUpdate.setPassportDateIssue(employee.getPassportDateIssue());
-        employeeRepository.save(employeeToUpdate);
+        employee.setId(employeeToUpdate.getId());
+        employee.setUuid(employeeToUpdate.getUuid());
+        employee.setPassword(employeeToUpdate.getPassword());
+        employee.setCreatedAt(employeeToUpdate.getCreatedAt());
+//        employeeToUpdate.setStatus(employee.getStatus());
+//        employeeToUpdate.setRole(employee.getRole());
+//        employeeToUpdate.setName(employee.getName());
+//        employeeToUpdate.setMiddleName(employee.getMiddleName());
+//        employeeToUpdate.setSurname(employee.getSurname());
+//        employeeToUpdate.setLogin(employee.getLogin());
+//        employeeToUpdate.setPassportId(employee.getPassportId());
+//        employeeToUpdate.setPassportDateIssue(employee.getPassportDateIssue());
+        employeeRepository.save(employee);
         log.info("User with UUID ({}) successfully updated", uuid);
+    }
+
+    private Employee findEmployeeByLogin(String login) {
+        return employeeRepository.findEmployeeByLogin(login);
     }
 }

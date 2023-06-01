@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import ru.aston.model.enumeration.EmployeeRole;
-import ru.aston.model.enumeration.EmployeeStatus;
 
 @Data
 @Schema(description = "DTO with employee data to update employee in DB")
@@ -14,11 +12,11 @@ public class EmployeeUpdateDto {
 
     @Schema(description = "New employee status. Can't be null or empty")
     @NotNull(message = "EmployeeStatus must be not null")
-    private EmployeeStatus status;
+    private EmployeeStatusDto statusDto;
 
     @Schema(description = "New employee role. Can't be null or empty")
     @NotNull(message = "EmployeeRole must be not null")
-    private EmployeeRole role;
+    private EmployeeRoleDto roleDto;
 
     @Schema(description = "New employee name. Can't be null or empty")
     @NotBlank(message = "Name must be not blank")
