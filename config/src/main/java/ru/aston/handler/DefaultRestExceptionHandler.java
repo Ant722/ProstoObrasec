@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.aston.exception.EmployeeNotFoundException;
@@ -28,6 +29,14 @@ public class DefaultRestExceptionHandler {
     @ExceptionHandler(value = EmployeeNotFoundException.class)
     public ResponseEntity<CustomExceptionResponse> handleEmployeeNotFoundException(
             EmployeeNotFoundException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = MailSendException.class)
+    public ResponseEntity <CustomExceptionResponse> handleMailException(MailSendException ex){
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);

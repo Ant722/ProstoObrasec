@@ -27,7 +27,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee generatePasswordByUuid(UUID uuid) {
         Employee employee = employeeRepository.findEmployeeByUuid(uuid);
-        employee.setPassword(PasswordGeneratorUtils.generatePassword());
+        String oldPassword = employee.getPassword();
+        String newPassword = PasswordGeneratorUtils.generatePassword();
+        while (oldPassword.equals(newPassword)) {
+            newPassword = PasswordGeneratorUtils.generatePassword();
+        }
+        employee.setPassword(newPassword);
         employeeRepository.save(employee);
         log.info("Password from employee UUID {} generate", employee.getUuid());
         return employee;
