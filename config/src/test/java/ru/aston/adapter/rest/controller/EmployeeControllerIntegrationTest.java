@@ -25,7 +25,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
 
     private static final String ACTIVE_STATUS = "ACTIVE";
     private static final String TRANSFERRED_STATUS = "TRANSFERRED";
-    private static final String ADMIN_ROLE = "ACTIVE";
+    private static final String ADMIN_ROLE = "ADMIN";
     private static final String PRODUCT_MANAGER_ROLE = "PRODUCT_MANAGER";
 
     @Autowired
@@ -104,5 +104,16 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.result.[%d].status", lastRecord - 1).value(TRANSFERRED_STATUS))
                 .andExpect(jsonPath("$.result.[%d].surname",lastRecord - 1).value(Matchers.startsWith("surname11")))
                 .andExpect(jsonPath("$.result.[%d]", lastRecord).doesNotExist());
+    }
+
+    @Test
+    @Sql("classpath:sql/employeeController/searchEmployeesByUsername.sql")
+    void searchEmployeesByUsername_Should_Return400_whenInvalidSortField() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(SEARCH_EMPLOYEE_BY_SURNAME_ENDPOINT)
+                        .param("status", ACTIVE_STATUS)
+                        .param("role", ADMIN_ROLE)
+                        .param("sort", "invalidSortField")
+                        .param("page", "1"))
+                .andExpect(status().isBadRequest());
     }
 }

@@ -86,15 +86,9 @@ class EmployeeControllerTest {
         invalidPage.add("sort", "name");
         invalidPage.add("page", "-1");
 
-        LinkedMultiValueMap<String, String> invalidSort = new LinkedMultiValueMap<>();
-        invalidSort.add("status", "ACTIVE");
-        invalidSort.add("role", "ADMIN");
-        invalidSort.add("sort", "invalidSort");
-        invalidSort.add("page", "1");
-
         LinkedMultiValueMap<String, String> nullParams = new LinkedMultiValueMap<>();
 
-        return Stream.of(invalidStatus, invalidRole, invalidPage, invalidSort, nullParams);
+        return Stream.of(invalidStatus, invalidRole, invalidPage, nullParams);
     }
 
     private MockMvc getMockMvc(){
