@@ -45,19 +45,6 @@ public class DefaultRestExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
     }
 
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<List<CustomExceptionResponse>> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException ex
-    ) {
-        List<CustomExceptionResponse> messages = ex.getBindingResult().getFieldErrors().stream()
-                .map(msg -> new CustomExceptionResponse(msg.getDefaultMessage()))
-                .collect(Collectors.toList());
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messages);
-    }
-
     private CustomExceptionResponse handle(Exception ex) {
         return new CustomExceptionResponse(ex.getMessage());
     }
