@@ -55,7 +55,6 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        log.error(messages.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messages);
     }
 
