@@ -39,14 +39,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUuid(employeeToUpdate.getUuid());
         employee.setPassword(employeeToUpdate.getPassword());
         employee.setCreatedAt(employeeToUpdate.getCreatedAt());
-//        employeeToUpdate.setStatus(employee.getStatus());
-//        employeeToUpdate.setRole(employee.getRole());
-//        employeeToUpdate.setName(employee.getName());
-//        employeeToUpdate.setMiddleName(employee.getMiddleName());
-//        employeeToUpdate.setSurname(employee.getSurname());
-//        employeeToUpdate.setLogin(employee.getLogin());
-//        employeeToUpdate.setPassportId(employee.getPassportId());
-//        employeeToUpdate.setPassportDateIssue(employee.getPassportDateIssue());
         employeeRepository.save(employee);
         log.info("User with UUID ({}) successfully updated", uuid);
     }
