@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api_impl.EmployeeServiceImpl;
 import ru.aston.appimpl.serviceimpl.entity_factory.EmployeeFactory;
+import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
 
 import java.util.UUID;
@@ -29,10 +30,18 @@ public class EmployeeServiceImplTest {
     @Test
     void generatePasswordByUuidMustNewPassword() {
         Employee employee = EmployeeFactory.getValidEmployee();
-        String oldPassword = employee.getPassword();
+        String oldPassword = employee.getGeneratePassword().getPassword();
         Mockito.when(employeeRepository.findEmployeeByUuid(UUID_EMPLOYEE))
                 .thenReturn(employee);
         Employee expectedEmployee = employeeService.generatePasswordByUuid(UUID_EMPLOYEE);
-        Assertions.assertNotEquals(oldPassword, expectedEmployee.getPassword());
+        Assertions.assertNotEquals(oldPassword, expectedEmployee.getGeneratePassword().getPassword());
+    }
+
+    @Test
+    void generatePasswordByUuidShouldGenerateTimeException() {
+        Employee employee = EmployeeFactory.getEmployeeWrongPasswordGenerationDate();
+        Mockito.when(employeeRepository.findEmployeeByUuid(UUID_EMPLOYEE)).thenReturn(employee);
+        Assertions.assertThrows(PasswordGenerateTimeException.class,
+                () -> employeeService.generatePasswordByUuid(UUID_EMPLOYEE));
     }
 }

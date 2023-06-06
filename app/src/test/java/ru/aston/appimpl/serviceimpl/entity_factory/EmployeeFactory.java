@@ -1,10 +1,12 @@
 package ru.aston.appimpl.serviceimpl.entity_factory;
 
 import ru.aston.model.Employee;
+import ru.aston.model.GeneratePassword;
 import ru.aston.model.enumeration.EmployeeRole;
 import ru.aston.model.enumeration.EmployeeStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class EmployeeFactory {
@@ -35,11 +37,24 @@ public class EmployeeFactory {
                 .name(NAME)
                 .middleName(MIDDLE_NAME)
                 .login(VALID_LOGIN)
-                .password(VALID_PASSWORD)
+                .generatePassword(GeneratePassword.builder()
+                        .password(VALID_PASSWORD)
+                        .modifiedAt(LocalDateTime.MIN)
+                        .build())
                 .passportId(PASSPORT_ID)
                 .passportDateIssue(LocalDate.now())
                 .role(ADMIN_ROLE)
                 .status(ACTIVE_STATUS)
+                .build();
+    }
+
+    public static Employee getEmployeeWrongPasswordGenerationDate() {
+        return Employee.builder().id(1L)
+                .uuid(UUID_EMPLOYEE)
+                .generatePassword(GeneratePassword.builder()
+                        .password(VALID_PASSWORD)
+                        .modifiedAt(LocalDateTime.now())
+                        .build())
                 .build();
     }
 }

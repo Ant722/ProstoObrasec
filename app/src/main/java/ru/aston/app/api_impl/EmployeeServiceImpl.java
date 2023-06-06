@@ -5,9 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
+import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
+import ru.aston.model.GeneratePassword;
 import ru.util.PasswordGeneratorUtils;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Slf4j
@@ -16,6 +20,7 @@ import java.util.UUID;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+
 
     @Override
     public Employee getEmployeeByUuid(UUID uuid) {
@@ -27,14 +32,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee generatePasswordByUuid(UUID uuid) {
         Employee employee = employeeRepository.findEmployeeByUuid(uuid);
-        String oldPassword = employee.getPassword();
+        GeneratePassword generatePassword = employee.getGeneratePassword();
+        checkTimeGeneratePassword(generatePassword.getModifiedAt());
+        String oldPassword = generatePassword.getPassword();
         String newPassword = PasswordGeneratorUtils.generatePassword();
         while (oldPassword.equals(newPassword)) {
             newPassword = PasswordGeneratorUtils.generatePassword();
         }
-        employee.setPassword(newPassword);
+        generatePassword.setPassword(newPassword);
+        employee.setGeneratePassword(generatePassword);
         employeeRepository.save(employee);
         log.info("Password from employee UUID {} generate", employee.getUuid());
         return employee;
+    }
+
+    private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
+        if (LocalDateTime.now().isBefore(generatePasswordTime.plus(10, ChronoUnit.MINUTES))) {
+            throw new PasswordGenerateTimeException();
+        }
     }
 }

@@ -1,4 +1,6 @@
 databaseChangeLog:
   - include:
       file: liquibase/scripts/2023_05_24_migrations_V1_create_employee_table.sql
+  - include:
+      file: liquibase/scripts/2023_06-06_migrations_V2_create_table_generate_password.sql
 encoding: "UTF-8"

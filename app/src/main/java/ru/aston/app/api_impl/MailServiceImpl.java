@@ -42,7 +42,7 @@ public class MailServiceImpl implements MailService {
                 StandardCharsets.UTF_8.name());
         Context thContext = new Context();
         thContext.setVariable("name", employee.getName());
-        thContext.setVariable("password", employee.getPassword());
+        thContext.setVariable("password", employee.getGeneratePassword().getPassword());
         String emailContent = templateEngine.process(PASSWORD_TEMPLATE_NAME, thContext);
 
         messageHelper.setFrom(emailFrom);

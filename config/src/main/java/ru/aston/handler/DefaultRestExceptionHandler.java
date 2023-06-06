@@ -10,6 +10,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.aston.exception.EmployeeNotFoundException;
+import ru.aston.exception.PasswordGenerateTimeException;
 
 import java.time.Instant;
 
@@ -36,11 +37,19 @@ public class DefaultRestExceptionHandler {
     }
 
     @ExceptionHandler(value = MailSendException.class)
-    public ResponseEntity <CustomExceptionResponse> handleMailException(MailSendException ex){
+    public ResponseEntity<CustomExceptionResponse> handleMailException(MailSendException ex) {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = PasswordGenerateTimeException.class)
+    public ResponseEntity<CustomExceptionResponse> handlePasswordGenerateException(PasswordGenerateTimeException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.error(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
     }
 
     private CustomExceptionResponse handle(Exception ex) {
