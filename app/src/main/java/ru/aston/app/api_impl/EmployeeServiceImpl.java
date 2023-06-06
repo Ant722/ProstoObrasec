@@ -21,7 +21,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-
     @Override
     public Employee getEmployeeByUuid(UUID uuid) {
         Employee employee = employeeRepository.findEmployeeByUuid(uuid);

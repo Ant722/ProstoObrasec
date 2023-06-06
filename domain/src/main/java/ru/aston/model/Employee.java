@@ -111,8 +111,12 @@ public class Employee {
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
+    /**
+     * Password is a part of credentials used to access a service.
+     * Can not be null.
+     */
     @OneToOne
-    @JoinColumn(name = "generate_password_id")
+    @JoinColumn(name = "generate_password_id", nullable = false)
     private GeneratePassword generatePassword;
 
 }
