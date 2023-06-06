@@ -3,6 +3,8 @@ package ru.aston.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import ru.aston.dto.request.EmployeeCreateDto;
+import org.mapstruct.Mappings;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.model.Employee;
@@ -24,6 +26,14 @@ public interface EmployeeMapper {
                 .withZone(ZoneId.systemDefault())
                 .format(instant);
     }
+
+    @Mappings({
+            @Mapping(source = "employeeCreateDto.passportDateIssue", target = "passportDateIssue", dateFormat = "dd.MM.yyyy"),
+            @Mapping(source = "employeeCreateDto.statusDto.status", target = "status"),
+            @Mapping(source = "employeeCreateDto.roleDto.role", target = "role")
+    })
+    Employee mapEmployeeCreateDtoToEmployee(EmployeeCreateDto employeeCreateDto);
+
 
     @Mappings({
             @Mapping(source = "employeeUpdateDto.passport", target = "passportId"),

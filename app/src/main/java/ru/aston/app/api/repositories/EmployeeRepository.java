@@ -11,8 +11,7 @@ import java.util.UUID;
 public interface EmployeeRepository {
 
     Employee findEmployeeByUuid(UUID uuid);
-
-    Employee save(Employee employee);
-
     Employee findEmployeeByLogin(String login);
+    Employee findEmployeeByPassportId(String passportId);
+    Employee save(Employee employee);
 }

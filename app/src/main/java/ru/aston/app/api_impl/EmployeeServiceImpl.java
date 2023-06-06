@@ -3,8 +3,13 @@ package ru.aston.app.api_impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
+import ru.aston.exception.EmployeeNotFoundByPassportIdException;
+import ru.aston.exception.EmployeeNotFoundException;
+import ru.aston.exception.LoginConflictException;
+import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.model.Employee;
@@ -27,6 +32,36 @@ public class EmployeeServiceImpl implements EmployeeService {
         log.info("Taken from employee with UUID {}", employee.getUuid());
         return employee;
     }
+
+    @Override
+    @Transactional
+    public void createNewEmployee(Employee employee) {
+        UUID uuid = UUID.randomUUID();
+        try {
+            if(findEmployeeByLogin(employee.getLogin())!=null){
+                log.info("Employee with login = ({}) was not created because this login already " +
+                        "belongs to another employee", employee.getLogin());
+
+                throw new LoginConflictException();
+            }
+        }catch (EmployeeNotFoundException ignored){
+        }
+
+        try {
+            if(findEmployeeByPassportId(employee.getPassportId())!=null){
+                log.info("Employee with passport id = ({}) was not created because this passport" +
+                        " id used another employee",employee.getPassportId());
+                throw new PassportIdConflictException();
+            }
+        } catch (EmployeeNotFoundByPassportIdException ignored) {
+        }
+
+        employee.setUuid(uuid);
+        employee.setPassword("defaultPass");
+        employeeRepository.save(employee);
+        log.info("New employee with login ({}) was registered",employee.getLogin());
+    }
+
 
     /**
      * Accepts employee data to update and updates Employee in DB. Checks login uniqueness before updating
@@ -52,5 +87,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private Employee findEmployeeByLogin(String login) {
         return employeeRepository.findEmployeeByLogin(login);
+    }
+
+    private Employee findEmployeeByPassportId(String passportId){
+        return employeeRepository.findEmployeeByPassportId(passportId);
     }
 }

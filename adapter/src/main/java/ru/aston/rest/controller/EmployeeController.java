@@ -1,6 +1,7 @@
 package ru.aston.rest.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -10,6 +11,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ru.aston.dto.request.EmployeeCreateDto;
 import org.springframework.web.bind.annotation.*;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
@@ -89,6 +92,42 @@ public class EmployeeController {
             @RequestBody EmployeeUpdateDto dto
     ) {
         employeeFacade.updateEmployeeInfo(dto, uuid);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Add new employee",
+            description = "Allow to add new employee"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Adding new employee was successfully compleate",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "BAD REQUEST",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "NOT FOUND",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Conflict",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "INTERNAL SERVER ERROR",
+                            content = @Content)
+            })
+    @PostMapping("/")
+    public ResponseEntity<Void> createNewEmployee(
+            @Valid
+            @Parameter(description = "Employee registered dto")
+            @RequestBody EmployeeCreateDto employeeDto){
+            employeeFacade.createNewEmployee(employeeDto);
         return ResponseEntity.ok().build();
     }
 }
