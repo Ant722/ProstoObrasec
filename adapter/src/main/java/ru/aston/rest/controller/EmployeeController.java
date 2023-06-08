@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,7 +79,8 @@ public class EmployeeController {
                             content = @Content)
             })
     @GetMapping
-    public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(@Valid EmployeeSearchCriteriaDto dto) {
+    public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(
+            @Valid @ParameterObject EmployeeSearchCriteriaDto dto) {
         return ResponseEntity.ok(employeeFacade.searchEmployeesByUsername(dto));
     }
 }

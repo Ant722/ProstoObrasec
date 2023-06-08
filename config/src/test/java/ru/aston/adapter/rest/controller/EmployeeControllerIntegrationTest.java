@@ -74,7 +74,8 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
                         .param("page", String.valueOf(currentPage)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.info.count").value(recordsCount))
-                .andExpect(jsonPath("$.info.pages").value((int) Math.ceil((double) recordsCount / defaultPageSize)))
+                .andExpect(jsonPath("$.info.pages")
+                        .value((int) Math.ceil((double) recordsCount / defaultPageSize)))
                 .andExpect(jsonPath("$.result.[0].role").value(ADMIN_ROLE))
                 .andExpect(jsonPath("$.result.[0].status").value(ACTIVE_STATUS))
                 .andExpect(jsonPath("$.result.[%d].role", lastRecord - 1).value(ADMIN_ROLE))
@@ -84,7 +85,7 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     @Sql("classpath:sql/employeeController/searchEmployeesByUsername.sql")
-    void searchEmployeesByUsername_Should_Return_allTransferredProductManager_surnameStartsWith() throws Exception {
+    void searchEmployeesByUsername_Should_Return_allTransferredProductManager_whereSurnameContains() throws Exception {
         int currentPage = 1;
         int recordsCount = 10;
         int lastRecord = Math.min(defaultPageSize, recordsCount);
@@ -92,17 +93,19 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
                         .param("status", TRANSFERRED_STATUS)
                         .param("role", PRODUCT_MANAGER_ROLE)
                         .param("sort", "name")
-                        .param("surname", "surname11")
+                        .param("surname", "urname11")
                         .param("page", String.valueOf(currentPage)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.info.count").value(recordsCount))
-                .andExpect(jsonPath("$.info.pages").value((int) Math.ceil((double) recordsCount / defaultPageSize)))
+                .andExpect(jsonPath("$.info.pages")
+                        .value((int) Math.ceil((double) recordsCount / defaultPageSize)))
                 .andExpect(jsonPath("$.result.[0].role").value(PRODUCT_MANAGER_ROLE))
                 .andExpect(jsonPath("$.result.[0].status").value(TRANSFERRED_STATUS))
-                .andExpect(jsonPath("$.result.[0].surname").value(Matchers.startsWith("surname11")))
+                .andExpect(jsonPath("$.result.[0].surname").value(Matchers.containsString("urname11")))
                 .andExpect(jsonPath("$.result.[%d].role", lastRecord - 1).value(PRODUCT_MANAGER_ROLE))
                 .andExpect(jsonPath("$.result.[%d].status", lastRecord - 1).value(TRANSFERRED_STATUS))
-                .andExpect(jsonPath("$.result.[%d].surname",lastRecord - 1).value(Matchers.startsWith("surname11")))
+                .andExpect(jsonPath("$.result.[%d].surname",lastRecord - 1)
+                        .value(Matchers.containsString("urname11")))
                 .andExpect(jsonPath("$.result.[%d]", lastRecord).doesNotExist());
     }
 

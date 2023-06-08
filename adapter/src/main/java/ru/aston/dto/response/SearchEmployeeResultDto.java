@@ -12,6 +12,6 @@ public class SearchEmployeeResultDto {
     @Schema(description = "Pagination info")
     private PaginationDto info;
 
-    @Schema(description = "Number of pages")
+    @Schema(description = "List of employees")
     private List<EmployeeShortInformationDto> result;
 }

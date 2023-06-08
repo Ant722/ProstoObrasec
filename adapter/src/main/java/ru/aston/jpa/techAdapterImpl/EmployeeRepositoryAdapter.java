@@ -37,13 +37,18 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public Page<Employee> searchEmployeesByUsername(String status, String role, String sort, String surname, Integer page) {
+    public Page<Employee> searchEmployeesByUsername(
+            String status,
+            String role,
+            String sort,
+            String surname,
+            Integer page) {
         QEmployee employee = QEmployee.employee;
 
         BooleanBuilder predicate = new BooleanBuilder()
                 .and(employee.status.eq(EmployeeStatus.valueOf(status)))
                 .and(employee.role.eq(EmployeeRole.valueOf(role)))
-                .and(surname != null ? employee.surname.startsWith(surname) : null);
+                .and(surname != null ? employee.surname.contains(surname) : null);
 
         PageRequest pageRequest = PageRequest.of(page, defaultPageSize, Sort.Direction.ASC, sort);
         try {

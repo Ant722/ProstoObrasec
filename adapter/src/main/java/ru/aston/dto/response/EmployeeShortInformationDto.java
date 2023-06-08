@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@Schema(description = "DTO with employee short information for list")
+@Schema(description = "DTO with employee short information")
 public class EmployeeShortInformationDto {
 
     @Schema(description = "Employee's UUID")
