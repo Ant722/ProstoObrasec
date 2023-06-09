@@ -9,6 +9,13 @@ import ru.aston.model.Employee;
 
 import java.util.UUID;
 
+/**
+ * EmployeeRepositoryAdapter that implements EmployeeRepository and throws specific exceptions.
+ * Uses EmployeeJpaRepisitory methods inside
+ *
+ * @see EmployeeRepository
+ * @see EmployeeJpaRepository
+ */
 @Repository
 @RequiredArgsConstructor
 public class EmployeeRepositoryAdapter implements EmployeeRepository {
@@ -18,8 +25,17 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     @Override
     public Employee findEmployeeByUuid(UUID uuid) {
         return employeeJpaRepository.findByUuid(uuid)
-                .orElseThrow(() -> {
-                    throw new EmployeeNotFoundException(uuid);
-                });
+                .orElseThrow(() -> new EmployeeNotFoundException(uuid));
+    }
+
+    @Override
+    public Employee save(Employee employee) {
+        return employeeJpaRepository.save(employee);
+    }
+
+    @Override
+    public Employee findEmployeeByLogin(String login) {
+        return employeeJpaRepository.findEmployeeByLogin(login)
+                .orElseThrow(() -> new EmployeeNotFoundException(login));
     }
 }

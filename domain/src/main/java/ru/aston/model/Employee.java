@@ -90,6 +90,7 @@ public class Employee {
     /**
      * Employee role.
      * Can not be null.
+     *
      * @see EmployeeRole
      */
     @Column(name = "role", nullable = false)
@@ -99,6 +100,7 @@ public class Employee {
     /**
      * Employee status.
      * Can not be null.
+     *
      * @see EmployeeStatus
      */
     @Column(name = "status", nullable = false)
