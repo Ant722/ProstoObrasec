@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.model.Employee;
+import ru.aston.request.EmployeeSearchCriteria;
 
 import java.util.UUID;
 
@@ -27,14 +28,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(readOnly = true, timeout = 5)
-    public Page<Employee> searchEmployeesByUsername(
-            String status,
-            String role,
-            String sort,
-            String surname,
-            Integer page) {
-        Page<Employee> employeePage = employeeRepository.searchEmployeesByUsername(status, role, sort, surname, page);
-        log.info("Taken from employee {} records, current page is {}", employeePage.getTotalElements(), page);
+    public Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria) {
+        Page<Employee> employeePage = employeeRepository.searchEmployeesByUsername(searchCriteria);
+        log.info(
+                "Taken from employee {} records, current page is {}",
+                employeePage.getTotalElements(),
+                searchCriteria.getPage());
         return employeePage;
     }
 }

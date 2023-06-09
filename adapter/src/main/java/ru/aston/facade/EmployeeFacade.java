@@ -7,6 +7,8 @@ import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.mapper.EmployeeMapper;
+import ru.aston.mapper.SearchCriteriaMapper;
+import ru.aston.request.EmployeeSearchCriteria;
 
 import java.util.UUID;
 
@@ -17,22 +19,17 @@ public class EmployeeFacade {
     private final EmployeeService employeeService;
 
     private final EmployeeMapper employeeMapper;
+    private final SearchCriteriaMapper searchCriteriaMapper;
 
     public EmployeeInformationDto getEmployeeInformationByUuid(String uuid) {
         return employeeMapper.mapEmployeeToEmployeeInformationDto(
                 employeeService.getEmployeeByUuid(UUID.fromString(uuid)));
     }
 
-    /**
-     * Page numbering starts at number 1
-     */
     public SearchEmployeeResultDto searchEmployeesByUsername(EmployeeSearchCriteriaDto dto) {
+        EmployeeSearchCriteria searchCriteria = searchCriteriaMapper
+                .mapEmployeeSearchCriteriaDtoToEmployeeSearchCriteriaRequest(dto);
         return employeeMapper.mapPageToSearchEmployeeResultDto(
-                employeeService.searchEmployeesByUsername(
-                        dto.getStatus().name(),
-                        dto.getRole().name(),
-                        dto.getSort(),
-                        dto.getSurname(),
-                        dto.getPage() - 1));
+                employeeService.searchEmployeesByUsername(searchCriteria));
     }
 }

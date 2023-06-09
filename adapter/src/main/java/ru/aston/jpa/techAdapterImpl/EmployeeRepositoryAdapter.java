@@ -16,6 +16,7 @@ import ru.aston.model.Employee;
 import ru.aston.model.QEmployee;
 import ru.aston.model.enumeration.EmployeeRole;
 import ru.aston.model.enumeration.EmployeeStatus;
+import ru.aston.request.EmployeeSearchCriteria;
 
 import java.util.UUID;
 
@@ -37,20 +38,17 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public Page<Employee> searchEmployeesByUsername(
-            String status,
-            String role,
-            String sort,
-            String surname,
-            Integer page) {
+    public Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria) {
         QEmployee employee = QEmployee.employee;
+        String surname = searchCriteria.getSurname();
 
         BooleanBuilder predicate = new BooleanBuilder()
-                .and(employee.status.eq(EmployeeStatus.valueOf(status)))
-                .and(employee.role.eq(EmployeeRole.valueOf(role)))
-                .and(surname != null ? employee.surname.contains(surname) : null);
+                .and(employee.status.eq(EmployeeStatus.valueOf(searchCriteria.getStatus())))
+                .and(employee.role.eq(EmployeeRole.valueOf(searchCriteria.getRole())))
+                .and(surname != null ? employee.surname.containsIgnoreCase(surname) : null);
 
-        PageRequest pageRequest = PageRequest.of(page, defaultPageSize, Sort.Direction.ASC, sort);
+        PageRequest pageRequest = PageRequest.of(
+                searchCriteria.getPage(), defaultPageSize, Sort.Direction.ASC, searchCriteria.getSort());
         try {
             return employeeJpaRepository.findAll(predicate, pageRequest);
         } catch (PropertyReferenceException e) {

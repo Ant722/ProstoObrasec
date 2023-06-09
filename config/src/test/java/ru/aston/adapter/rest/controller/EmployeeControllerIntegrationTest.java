@@ -101,11 +101,12 @@ class EmployeeControllerIntegrationTest extends AbstractIntegrationTest {
                         .value((int) Math.ceil((double) recordsCount / defaultPageSize)))
                 .andExpect(jsonPath("$.result.[0].role").value(PRODUCT_MANAGER_ROLE))
                 .andExpect(jsonPath("$.result.[0].status").value(TRANSFERRED_STATUS))
-                .andExpect(jsonPath("$.result.[0].surname").value(Matchers.containsString("urname11")))
+                .andExpect(jsonPath("$.result.[0].surname")
+                        .value(Matchers.containsStringIgnoringCase("urname11")))
                 .andExpect(jsonPath("$.result.[%d].role", lastRecord - 1).value(PRODUCT_MANAGER_ROLE))
                 .andExpect(jsonPath("$.result.[%d].status", lastRecord - 1).value(TRANSFERRED_STATUS))
                 .andExpect(jsonPath("$.result.[%d].surname",lastRecord - 1)
-                        .value(Matchers.containsString("urname11")))
+                        .value(Matchers.containsStringIgnoringCase("urname11")))
                 .andExpect(jsonPath("$.result.[%d]", lastRecord).doesNotExist());
     }
 
