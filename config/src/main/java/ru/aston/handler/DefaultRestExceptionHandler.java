@@ -6,12 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -41,6 +45,22 @@ public class DefaultRestExceptionHandler {
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<CustomExceptionResponse> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex
+    ) {
+        CustomExceptionResponse messages = ex.getBindingResult().getFieldErrors().stream()
+                .map(msg -> new CustomExceptionResponse(msg.getDefaultMessage()))
+                .collect(Collectors.toList());
+        FieldError message = ex.getBindingResult().getFieldError();
+        assert message != null;
+        CustomExceptionResponse cer = new CustomExceptionResponse(message.getDefaultMessage());
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(cer));
     }
 
     private CustomExceptionResponse handle(Exception ex) {
