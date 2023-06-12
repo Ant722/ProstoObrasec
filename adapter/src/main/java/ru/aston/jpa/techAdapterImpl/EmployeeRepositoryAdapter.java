@@ -45,4 +45,9 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
         return employeeJpaRepository.findEmployeeByPassportId(passportId)
                 .orElseThrow(()-> new EmployeeNotFoundByPassportIdException(passportId));
     }
+
+    @Override
+    public void save(Employee employee) {
+        employeeJpaRepository.save(employee);
+    }
 }
