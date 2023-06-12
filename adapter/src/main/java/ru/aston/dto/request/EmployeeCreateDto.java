@@ -21,7 +21,7 @@ public class EmployeeCreateDto {
     private String middleName;
     @NotNull
     @Schema(description = "Role of employee. Cannot be null or empty")
-    private EmployeeRoleDto roleDto;
+    private String role;
 
     @NotBlank
     @Schema(description = "Login of employee. Cannot be null or empty")
@@ -29,7 +29,7 @@ public class EmployeeCreateDto {
 
     @NotNull
     @Schema(description = "Status of employee. Cannot be null or empty")
-    private EmployeeStatusDto statusDto;
+    private String status;
 
     @NotBlank
     @Schema(description = "Passport data. Cannot be null or empty")

@@ -1,8 +1,5 @@
 package ru.aston.adapter.rest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,22 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import ru.aston.adapter.rest.JsonStringConverter;
+import ru.aston.adapter.rest.controller.dtoFactory.EmployeeCreateDtoFactory;
 import ru.aston.dto.request.EmployeeCreateDto;
+import ru.aston.exception.LoginConflictException;
 import ru.aston.facade.EmployeeFacade;
 import ru.aston.rest.controller.EmployeeController;
 
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static ru.aston.adapter.rest.controller.dtoFactory.EmployeeControllerTestDtoFactory.getNevValidRegistrationEmployeeRequestDto;
+import static ru.aston.adapter.rest.controller.dtoFactory.EmployeeCreateDtoFactory.getValidRegistrationEmployeeRequestDto;
 
 @WebMvcTest(EmployeeController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -73,22 +71,37 @@ class EmployeeControllerTest {
 
     @Test
     void createNewEmployee_ShouldReturn200_WhenAddNewEmployee() throws Exception {
-        EmployeeCreateDto createDto = getNevValidRegistrationEmployeeRequestDto();
+        EmployeeCreateDto createDto = getValidRegistrationEmployeeRequestDto();
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
                 contentType(MediaType.APPLICATION_JSON).
-                content("""
-                    {                                                                        
-                        "surname":"ihover",
-                        "name": "IHOR",
-                        "middleName":"MIDL",
-                        "roleDto":"ADMIN",
-                        "login":"testlogin",
-                        "statusDto":"ACTIVE",
-                        "passportId":"testpass",
-                        "passportDateIssue":"21.09.2002"                                    
-                    }""");
+                content(JsonStringConverter.asJsonString(createDto));
         this.mockMvc.perform(builder)
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void createNewEmployee_ShouldReturn409_WhenInvalidLogin() throws Exception{
+        EmployeeCreateDto dto = EmployeeCreateDtoFactory.getRegistrationEmployeeRequestDtoInvalidLogin();
+        doThrow(LoginConflictException.class).when(employeeFacade).createNewEmployee(dto);
+        var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
+                contentType(MediaType.APPLICATION_JSON).
+                content(JsonStringConverter.asJsonString(dto));
+        this.mockMvc.perform(builder)
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void createNewEmployee_ShouldReturn400_WhenInvalidCreateEmployeeDto() throws Exception {
+        EmployeeCreateDto dto = EmployeeCreateDtoFactory.getInvalidCreateEmployeeDto();
+        var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
+                contentType(MediaType.APPLICATION_JSON).
+                content(JsonStringConverter.asJsonString(dto));
+        this.mockMvc.perform(builder)
+                .andExpect(status().isBadRequest());
+    }
+
+
+
+
 }
 

@@ -10,8 +10,6 @@ import ru.aston.exception.EmployeeNotFoundByPassportIdException;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.exception.PassportIdConflictException;
-import ru.aston.exception.EmployeeNotFoundException;
-import ru.aston.exception.LoginConflictException;
 import ru.aston.model.Employee;
 
 import java.util.UUID;
@@ -38,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void createNewEmployee(Employee employee) {
         UUID uuid = UUID.randomUUID();
         try {
-            if(findEmployeeByLogin(employee.getLogin())!=null){
+            if(employeeRepository.findEmployeeByLogin(employee.getLogin())!=null){
                 log.info("Employee with login = ({}) was not created because this login already " +
                         "belongs to another employee", employee.getLogin());
 
@@ -48,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         try {
-            if(findEmployeeByPassportId(employee.getPassportId())!=null){
+            if(employeeRepository.findEmployeeByPassportId(employee.getPassportId())!=null){
                 log.info("Employee with passport id = ({}) was not created because this passport" +
                         " id used another employee",employee.getPassportId());
                 throw new PassportIdConflictException();
@@ -89,7 +87,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findEmployeeByLogin(login);
     }
 
-    private Employee findEmployeeByPassportId(String passportId){
-        return employeeRepository.findEmployeeByPassportId(passportId);
-    }
 }

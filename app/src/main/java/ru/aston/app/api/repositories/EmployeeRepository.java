@@ -13,5 +13,5 @@ public interface EmployeeRepository {
     Employee findEmployeeByUuid(UUID uuid);
     Employee findEmployeeByLogin(String login);
     Employee findEmployeeByPassportId(String passportId);
-    Employee save(Employee employee);
+    void save(Employee employee);
 }

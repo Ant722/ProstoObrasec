@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.aston.dto.request.EmployeeCreateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.model.Employee;
 import ru.aston.model.enumeration.EmployeeRole;
@@ -28,6 +29,14 @@ class EmployeeMapperTest {
         EmployeeInformationDto actualDto = employeeMapper.mapEmployeeToEmployeeInformationDto(getEmployee());
 
         Assertions.assertEquals(expectedDto, actualDto);
+    }
+
+    @Test
+    void should_mapEmployeeCreateDto_toEmployee(){
+        Employee expectedEmployee = getExpectedEmployee();
+        Employee employee = employeeMapper.mapEmployeeCreateDtoToEmployee(getCreateEmployeeDto());
+
+        Assertions.assertEquals(expectedEmployee,employee);
     }
 
     private Employee getEmployee() {
@@ -60,5 +69,31 @@ class EmployeeMapperTest {
         dto.setCreatedAt("02.02.2023");
         dto.setModifiedAt("03.03.2023");
         return dto;
+    }
+
+    private EmployeeCreateDto getCreateEmployeeDto(){
+        EmployeeCreateDto newRegisteredEmployee = new EmployeeCreateDto();
+        newRegisteredEmployee.setName("testName");
+        newRegisteredEmployee.setSurname("testSurname");
+        newRegisteredEmployee.setMiddleName("testMiddleName");
+        newRegisteredEmployee.setRole("ADMIN");
+        newRegisteredEmployee.setStatus("ACTIVE");
+        newRegisteredEmployee.setPassportDateIssue("21.09.2002");
+        newRegisteredEmployee.setPassportId("testPassId");
+        newRegisteredEmployee.setLogin("testLogin");
+        return newRegisteredEmployee;
+    }
+
+    private Employee getExpectedEmployee(){
+        Employee employee = new Employee();
+        employee.setName("testName");
+        employee.setSurname("testSurname");
+        employee.setMiddleName("testMiddleName");
+        employee.setRole(EmployeeRole.ADMIN);
+        employee.setStatus(EmployeeStatus.ACTIVE);
+        employee.setPassportDateIssue(LocalDate.of(2002,9,21));
+        employee.setPassportId("testPassId");
+        employee.setLogin("testLogin");
+        return employee;
     }
 }
