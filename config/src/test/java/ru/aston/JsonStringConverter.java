@@ -7,7 +7,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JsonStringConverter {
 
-    private JsonStringConverter() {}
+    private JsonStringConverter() {
+    }
 
     public static String asJsonString(final Object obj) throws JsonProcessingException {
         ObjectMapper mapper = JsonMapper.builder()

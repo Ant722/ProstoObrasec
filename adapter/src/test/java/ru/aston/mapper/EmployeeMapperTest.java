@@ -6,6 +6,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.aston.dto.request.EmployeeRoleDto;
+import ru.aston.dto.request.EmployeeStatusDto;
+import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.model.Employee;
 import ru.aston.model.enumeration.EmployeeRole;
@@ -28,6 +31,18 @@ class EmployeeMapperTest {
         EmployeeInformationDto actualDto = employeeMapper.mapEmployeeToEmployeeInformationDto(getEmployee());
 
         Assertions.assertEquals(expectedDto, actualDto);
+    }
+
+    @Test
+    void should_mapEmployeeUpdateDto_toEmployee() {
+        Employee expectedEmployee = getEmployee();
+        expectedEmployee.setId(null);
+        expectedEmployee.setUuid(null);
+        expectedEmployee.setCreatedAt(null);
+        expectedEmployee.setModifiedAt(null);
+        Employee actualEmployee = employeeMapper.mapEmployeeUpdateDtoToEmployee(getEmployeeUpdateDto());
+
+        Assertions.assertEquals(expectedEmployee, actualEmployee);
     }
 
     private Employee getEmployee() {
@@ -59,6 +74,19 @@ class EmployeeMapperTest {
         dto.setStatus("ACTIVE");
         dto.setCreatedAt("02.02.2023");
         dto.setModifiedAt("03.03.2023");
+        return dto;
+    }
+
+    private EmployeeUpdateDto getEmployeeUpdateDto() {
+        EmployeeUpdateDto dto = new EmployeeUpdateDto();
+        dto.setSurname("Ivanov");
+        dto.setName("Ivan");
+        dto.setMiddleName("Ivanovich");
+        dto.setLogin("employeeLogin");
+        dto.setPassport("100");
+        dto.setPassportDateIssue("01.01.2023");
+        dto.setRoleDto(new EmployeeRoleDto("ADMIN"));
+        dto.setStatusDto(new EmployeeStatusDto("ACTIVE"));
         return dto;
     }
 }

@@ -1,10 +1,7 @@
 package ru.aston.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ru.aston.model.enumeration.EmployeeRole;
@@ -14,6 +11,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Data
 @Entity
 @Getter
 @Setter

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,8 +15,7 @@ import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 @Slf4j
@@ -27,7 +27,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     @ExceptionHandler(value = EmployeeNotFoundException.class)
@@ -51,16 +51,33 @@ public class DefaultRestExceptionHandler {
     public ResponseEntity<CustomExceptionResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex
     ) {
-        CustomExceptionResponse messages = ex.getBindingResult().getFieldErrors().stream()
-                .map(msg -> new CustomExceptionResponse(msg.getDefaultMessage()))
-                .collect(Collectors.toList());
         FieldError message = ex.getBindingResult().getFieldError();
-        assert message != null;
-        CustomExceptionResponse cer = new CustomExceptionResponse(message.getDefaultMessage());
+
+        CustomExceptionResponse cer = new CustomExceptionResponse(
+                message != null ? message.getDefaultMessage() : "Unknown error at MethodArgumentNotValidException"
+        );
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(cer));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cer);
+    }
+
+    @ExceptionHandler(value = DateTimeParseException.class)
+    public ResponseEntity<CustomExceptionResponse> handleDateTimeParseException(DateTimeParseException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseEntity<CustomExceptionResponse> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException ex
+    ) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     private CustomExceptionResponse handle(Exception ex) {

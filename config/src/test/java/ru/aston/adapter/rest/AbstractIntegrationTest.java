@@ -19,7 +19,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 public class AbstractIntegrationTest {
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-        private PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:14.2");;
+        private PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:14.2");
+        ;
 
         @Override
         public void initialize(ConfigurableApplicationContext applicationContext) {

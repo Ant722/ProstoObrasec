@@ -77,7 +77,7 @@ class EmployeeControllerTest {
                 "fc581e6e-f87e-11ed-b67e-0242ac1200021");
     }
 
-    private MockMvc getMockMvc(){
+    private MockMvc getMockMvc() {
         return mockMvc = webAppContextSetup(wac).build();
     }
 }
