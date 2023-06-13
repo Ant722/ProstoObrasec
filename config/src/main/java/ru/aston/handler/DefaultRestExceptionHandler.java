@@ -23,7 +23,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     @ExceptionHandler(value = EmployeeNotFoundException.class)
@@ -41,7 +41,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     private CustomExceptionResponse handle(Exception ex) {
