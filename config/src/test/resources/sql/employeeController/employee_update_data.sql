@@ -1,7 +1,3 @@
-BEGIN;
-
-DROP TABLE IF EXISTS employee;
-
 CREATE TABLE IF NOT EXISTS employee
 (
     id                  BIGSERIAL PRIMARY KEY,
@@ -40,5 +36,3 @@ VALUES ('9771203f-be0a-4ecf-9ed7-72978a35d201',
         'ACTIVE',
         '6666 333666',
         '11.11.2022');
-
-COMMIT;

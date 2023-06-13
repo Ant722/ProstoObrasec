@@ -67,7 +67,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(handle(ex));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     @ExceptionHandler(value = HttpMessageNotReadableException.class)

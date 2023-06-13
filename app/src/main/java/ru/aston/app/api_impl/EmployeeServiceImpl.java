@@ -33,10 +33,8 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void updateEmployeeInfo(Employee employee, UUID uuid) {
+        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         try {
-            if (employeeRepository.findEmployeeByUuid(uuid) == null) {
-                return;
-            }
             if (!findEmployeeByLogin(employee.getLogin()).getUuid().equals(uuid)) {
                 log.info("Employee with UUID = ({}) was not updated because login ({}) already " +
                         "belongs to another employee", uuid, employee.getLogin());
@@ -44,7 +42,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         } catch (EmployeeNotFoundException ignored) {
         }
-        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         employee.setId(employeeToUpdate.getId());
         employee.setUuid(employeeToUpdate.getUuid());
         employee.setPassword(employeeToUpdate.getPassword());

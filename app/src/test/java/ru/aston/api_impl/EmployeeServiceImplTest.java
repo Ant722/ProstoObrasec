@@ -10,7 +10,6 @@ import ru.aston.api_impl.entity_factory.EmployeeFactory;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api_impl.EmployeeServiceImpl;
 import ru.aston.exception.LoginConflictException;
-import ru.aston.model.Employee;
 
 import java.util.UUID;
 
@@ -30,7 +29,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     void should_throwLoginConflictException_whenLoginConflict() {
-        String loginForConflict = "i.ivanov";
+        String loginForConflict = EmployeeFactory.getCorrectEmployee().getLogin();
         when(employeeRepository.findEmployeeByLogin(loginForConflict)).thenThrow(LoginConflictException.class);
         when(employeeRepository.findEmployeeByUuid(EXISTING_UUID)).thenReturn(EmployeeFactory.getCorrectEmployee());
         Assertions.assertThrows(LoginConflictException.class, () -> employeeServiceImpl.updateEmployeeInfo(EmployeeFactory.getCorrectEmployee(), EXISTING_UUID));
