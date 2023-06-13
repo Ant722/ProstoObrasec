@@ -24,6 +24,9 @@ public class EmployeeServiceTest {
     @InjectMocks
     EmployeeServiceImpl employeeService;
 
+    @Mock
+    MailServiceImpl mailService;
+
     @Test
     public void createNewEmployee_ShouldOK_WhenEmployeeValid(){
         Employee employee = EmployeeFactory.getValidEmployee();
@@ -33,6 +36,7 @@ public class EmployeeServiceTest {
         verify(employeeRepository, times(1)).findEmployeeByPassportId(any());
         verify(employeeRepository, times(1)).findEmployeeByLogin(any());
         verify(employeeRepository, times(1)).save(employee);
+        verify(mailService, times(1)).sendSimpleEmailFromGeneratePassword(any());
     }
 
     @Test

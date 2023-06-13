@@ -46,8 +46,4 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
                 .orElseThrow(()-> new EmployeeNotFoundByPassportIdException(passportId));
     }
 
-    @Override
-    public void save(Employee employee) {
-        employeeJpaRepository.save(employee);
-    }
 }

@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
+import ru.aston.app.api.repositories.GeneratePasswordRepository;
 import ru.aston.app.api.services.EmployeeService;
+import ru.aston.app.api.services.MailService;
 import ru.aston.exception.EmployeeNotFoundByPassportIdException;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
@@ -28,6 +30,8 @@ import java.util.UUID;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final GeneratePasswordRepository generatePasswordRepository;
+    private final MailService mailService;
 
     @Override
     public Employee getEmployeeByUuid(UUID uuid) {
@@ -40,6 +44,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public void createNewEmployee(Employee employee) {
         UUID uuid = UUID.randomUUID();
+        try {
+            while (employeeRepository.findEmployeeByUuid(uuid)!=null){
+                uuid = UUID.randomUUID();
+            }
+        }catch (EmployeeNotFoundException ignored){
+        }
+
         try {
             if(employeeRepository.findEmployeeByLogin(employee.getLogin())!=null){
                 log.info("Employee with login = ({}) was not created because this login already " +
@@ -60,8 +71,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         employee.setUuid(uuid);
-        employee.setPassword("defaultPass");
+        String password = PasswordGeneratorUtils.generatePassword();
+        GeneratePassword generatePassword = new GeneratePassword();
+        generatePassword.setPassword(password);
+        employee.setGeneratePassword(generatePassword);
+        generatePasswordRepository.save(generatePassword);
         employeeRepository.save(employee);
+        mailService.sendSimpleEmailFromGeneratePassword(employee);
         log.info("New employee with login ({}) was registered",employee.getLogin());
     }
 

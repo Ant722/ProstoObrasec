@@ -27,7 +27,6 @@ public class EmployeeFactory {
         employee.setName(VALID_NAME);
         employee.setSurname(VALID_SURNAME);
         employee.setMiddleName(VALID_MIDDLE_NAME);
-        employee.setPassword(VALID_PASSWORD);
         employee.setPassportDateIssue(VALID_DATE_ISSUE);
         employee.setPassportId(VALID_PASSPORT_ID);
         employee.setRole(VALID_ROLE);
@@ -42,7 +41,6 @@ public class EmployeeFactory {
         employee.setName(VALID_NAME);
         employee.setSurname(VALID_SURNAME);
         employee.setMiddleName(VALID_MIDDLE_NAME);
-        employee.setPassword(VALID_PASSWORD);
         employee.setPassportDateIssue(VALID_DATE_ISSUE);
         employee.setPassportId(VALID_PASSPORT_ID);
         employee.setRole(VALID_ROLE);
