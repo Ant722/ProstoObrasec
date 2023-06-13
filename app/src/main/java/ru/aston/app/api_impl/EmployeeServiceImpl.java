@@ -40,6 +40,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    /**
+     * Accepts employee data to create Employee in DB. Checks uuid, login and passport id uniqueness before creating
+     */
     @Override
     @Transactional
     public void createNewEmployee(Employee employee) {
@@ -98,7 +101,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         employee.setId(employeeToUpdate.getId());
         employee.setUuid(employeeToUpdate.getUuid());
-        employee.setPassword(employeeToUpdate.getPassword());
+        GeneratePassword generatePassword = employeeToUpdate.getGeneratePassword();
+        employee.setGeneratePassword(generatePassword);
         employee.setCreatedAt(employeeToUpdate.getCreatedAt());
         employeeRepository.save(employee);
         log.info("User with UUID ({}) successfully updated", uuid);

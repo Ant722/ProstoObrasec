@@ -6,6 +6,13 @@ import ru.aston.app.api.repositories.GeneratePasswordRepository;
 import ru.aston.jpa.repositories.GeneratePasswordJpaRepository;
 import ru.aston.model.GeneratePassword;
 
+/**
+ * GeneratePasswordRepositoryAdapter that implements GeneratePasswordRepository and throws specific exceptions.
+ * Uses GeneratePasswordJpaRepository methods inside
+ *
+ * @see GeneratePasswordRepository
+ * @see GeneratePasswordJpaRepository
+ */
 @Repository
 @RequiredArgsConstructor
 public class GeneratePasswordRepositoryAdapter implements GeneratePasswordRepository {
