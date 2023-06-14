@@ -21,4 +21,32 @@ public class EmployeeFactory {
         employee.setStatus(EmployeeStatus.ON_VACATION);
         return employee;
     }
+
+    public static Employee getExistedEmployeeForLoginConflict() {
+        Employee employee = new Employee();
+        employee.setSurname("Petrov");
+        employee.setName("Petr");
+        employee.setMiddleName("Petrovich");
+        employee.setLogin("p.petrov");
+        employee.setPassword("pass1");
+        employee.setPassportId("4321 111333");
+        employee.setPassportDateIssue(LocalDate.parse("2020-10-10"));
+        employee.setRole(EmployeeRole.PRODUCT_MANAGER);
+        employee.setStatus(EmployeeStatus.ACTIVE);
+        return employee;
+    }
+
+    public static Employee getEmployeeWithLoginConflict() {
+        Employee employee = new Employee();
+        employee.setSurname("Ivanov");
+        employee.setName("Ivan");
+        employee.setMiddleName("Ivanovich");
+        employee.setLogin("p.petrov");
+        employee.setPassword("pass");
+        employee.setPassportId("1234 111222");
+        employee.setPassportDateIssue(LocalDate.parse("2020-10-10"));
+        employee.setRole(EmployeeRole.ADMIN);
+        employee.setStatus(EmployeeStatus.ON_VACATION);
+        return employee;
+    }
 }

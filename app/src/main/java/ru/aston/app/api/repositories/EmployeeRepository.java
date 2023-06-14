@@ -14,5 +14,5 @@ public interface EmployeeRepository {
 
     Employee save(Employee employee);
 
-    Employee findEmployeeByLogin(String login);
+    boolean existByLogin(String login);
 }

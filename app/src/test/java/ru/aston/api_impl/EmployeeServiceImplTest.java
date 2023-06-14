@@ -29,9 +29,9 @@ public class EmployeeServiceImplTest {
 
     @Test
     void should_throwLoginConflictException_whenLoginConflict() {
-        String loginForConflict = EmployeeFactory.getCorrectEmployee().getLogin();
-        when(employeeRepository.findEmployeeByLogin(loginForConflict)).thenThrow(LoginConflictException.class);
+        String loginForConflict = EmployeeFactory.getExistedEmployeeForLoginConflict().getLogin();
         when(employeeRepository.findEmployeeByUuid(EXISTING_UUID)).thenReturn(EmployeeFactory.getCorrectEmployee());
-        Assertions.assertThrows(LoginConflictException.class, () -> employeeServiceImpl.updateEmployeeInfo(EmployeeFactory.getCorrectEmployee(), EXISTING_UUID));
+        when(employeeRepository.existByLogin(loginForConflict)).thenReturn(true);
+        Assertions.assertThrows(LoginConflictException.class, () -> employeeServiceImpl.updateEmployeeInfo(EmployeeFactory.getEmployeeWithLoginConflict(), EXISTING_UUID));
     }
 }
