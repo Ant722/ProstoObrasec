@@ -36,6 +36,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         if (!employeeToUpdate.getLogin().equals(employee.getLogin())) {
             if (employeeRepository.existByLogin(employee.getLogin())) {
+                log.info("Employee with UUID = ({}) was not updated because login ({}) already " +
+                        "belongs to another employee", uuid, employee.getLogin());
                 throw new LoginConflictException();
             }
         }
