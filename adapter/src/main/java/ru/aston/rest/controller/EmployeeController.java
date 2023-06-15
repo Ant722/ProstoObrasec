@@ -5,14 +5,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.facade.EmployeeFacade;
 
@@ -54,5 +53,42 @@ public class EmployeeController {
             @PathVariable
             @Pattern(regexp = UUID_PATTERN) String uuid) {
         return ResponseEntity.ok(employeeFacade.getEmployeeInformationByUuid(uuid));
+    }
+
+    @Operation(
+            summary = "Employee data updating"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Employee successfully updated",
+                    content = @Content),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "BAD REQUEST",
+                    content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found",
+                    content = @Content),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict",
+                    content = @Content),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "INTERNAL SERVER ERROR",
+                    content = @Content)}
+    )
+
+    @PutMapping("/{employee_uuid}")
+    public ResponseEntity<Void> updateEmployee(
+            @Pattern(regexp = UUID_PATTERN)
+            @PathVariable(value = "employee_uuid") String uuid,
+            @Valid
+            @RequestBody EmployeeUpdateDto dto
+    ) {
+        employeeFacade.updateEmployeeInfo(dto, uuid);
+        return ResponseEntity.ok().build();
     }
 }

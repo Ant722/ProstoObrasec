@@ -111,7 +111,6 @@
             <version>${org.mapstruct.version}</version>
         </dependency>
     </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -141,5 +140,4 @@
             </snapshots>
         </repository>
     </repositories>
-
 </project>

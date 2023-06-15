@@ -10,7 +10,6 @@
     <packaging>jar</packaging>
     <version>${module.version}</version>
     <artifactId>app</artifactId>
-
     <dependencies>
         <dependency>
             <groupId>ru.aston</groupId>
