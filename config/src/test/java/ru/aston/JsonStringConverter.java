@@ -16,11 +16,4 @@ public class JsonStringConverter {
                 .build();
         return mapper.writeValueAsString(obj);
     }
-
-    public static <T> T jsonToObject(final String json, final Class<T> cl) throws JsonProcessingException {
-        ObjectMapper mapper = JsonMapper.builder()
-                .addModule(new JavaTimeModule())
-                .build();
-        return mapper.readValue(json, cl);
-    }
 }
