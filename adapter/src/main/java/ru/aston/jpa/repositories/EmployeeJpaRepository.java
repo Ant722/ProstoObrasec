@@ -18,4 +18,7 @@ public interface EmployeeJpaRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByUuid(UUID uuid);
     Optional<Employee> findEmployeeByLogin(String login);
     Optional<Employee>findEmployeeByPassportId(String passportId);
+    boolean existsByUuid(UUID uuid);
+    boolean existsByLogin(String login);
+    boolean existsByPassportId(String passportId);
 }

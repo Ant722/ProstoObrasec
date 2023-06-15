@@ -46,4 +46,19 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
                 .orElseThrow(()-> new EmployeeNotFoundByPassportIdException(passportId));
     }
 
+    @Override
+    public boolean existByUuid(UUID uuid){
+        return employeeJpaRepository.existsByUuid(uuid);
+    }
+
+    @Override
+    public boolean existByLogin(String login) {
+        return employeeJpaRepository.existsByLogin(login);
+    }
+
+    @Override
+    public boolean existByPassportId(String passportId) {
+        return employeeJpaRepository.existsByPassportId(passportId);
+    }
+
 }

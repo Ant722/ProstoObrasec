@@ -47,30 +47,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public void createNewEmployee(Employee employee) {
         UUID uuid = UUID.randomUUID();
-        try {
-            while (employeeRepository.findEmployeeByUuid(uuid)!=null){
-                uuid = UUID.randomUUID();
-            }
-        }catch (EmployeeNotFoundException ignored){
+
+        while (employeeRepository.existByUuid(uuid)){
+            uuid = UUID.randomUUID();
         }
 
-        try {
-            if(employeeRepository.findEmployeeByLogin(employee.getLogin())!=null){
-                log.info("Employee with login = ({}) was not created because this login already " +
-                        "belongs to another employee", employee.getLogin());
-
-                throw new LoginConflictException();
-            }
-        }catch (EmployeeNotFoundException ignored){
+        if(employeeRepository.existByLogin(employee.getLogin())) {
+            log.info("Employee with login = ({}) was not created because this login already " +
+                    "belongs to another employee", employee.getLogin());
+            throw new LoginConflictException();
         }
 
-        try {
-            if(employeeRepository.findEmployeeByPassportId(employee.getPassportId())!=null){
-                log.info("Employee with passport id = ({}) was not created because this passport" +
-                        " id used another employee",employee.getPassportId());
-                throw new PassportIdConflictException();
-            }
-        } catch (EmployeeNotFoundByPassportIdException ignored) {
+        if(employeeRepository.existByPassportId(employee.getPassportId())){
+            log.info("Employee with passport id = ({}) was not created because this passport" +
+                    " id used another employee",employee.getPassportId());
+            throw new PassportIdConflictException();
         }
 
         employee.setUuid(uuid);
@@ -101,9 +92,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         employee.setId(employeeToUpdate.getId());
         employee.setUuid(employeeToUpdate.getUuid());
-        GeneratePassword generatePassword = employeeToUpdate.getGeneratePassword();
-        employee.setGeneratePassword(generatePassword);
+        employee.setGeneratePassword(employeeToUpdate.getGeneratePassword());
         employee.setCreatedAt(employeeToUpdate.getCreatedAt());
+
         employeeRepository.save(employee);
         log.info("User with UUID ({}) successfully updated", uuid);
     }

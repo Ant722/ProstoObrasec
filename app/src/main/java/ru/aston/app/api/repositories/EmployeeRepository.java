@@ -14,4 +14,7 @@ public interface EmployeeRepository {
     Employee findEmployeeByLogin(String login);
     Employee findEmployeeByPassportId(String passportId);
     void save(Employee employee);
+    boolean existByUuid(UUID uuid);
+    boolean existByLogin(String login);
+    boolean existByPassportId(String passportId);
 }

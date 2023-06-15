@@ -121,7 +121,7 @@ public class EmployeeController {
                             description = "INTERNAL SERVER ERROR",
                             content = @Content)
             })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createNewEmployee(
             @Valid
             @Parameter(description = "Employee registered dto")
