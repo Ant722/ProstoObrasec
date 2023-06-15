@@ -11,5 +11,7 @@ public interface EmployeeService {
 
     Employee getEmployeeByUuid(UUID uuid);
 
+    Employee generatePasswordByUuid(UUID uuid);
+
     void updateEmployeeInfo(Employee employee, UUID uuid);
 }
