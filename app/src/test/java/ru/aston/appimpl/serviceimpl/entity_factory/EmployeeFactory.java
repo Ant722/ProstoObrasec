@@ -20,6 +20,7 @@ public class EmployeeFactory {
     private static final String MIDDLE_NAME = "Ivanov";
 
     private static final String VALID_LOGIN = "i.ivanov";
+    private static final String INVALID_LOGIN = "login";
 
     private static final String VALID_PASSWORD = "'nS0[uCdtOI,l?";
 
@@ -55,6 +56,24 @@ public class EmployeeFactory {
                         .password(VALID_PASSWORD)
                         .modifiedAt(LocalDateTime.now())
                         .build())
+                .build();
+    }
+
+    public static Employee getInvalidEmployee() {
+        return Employee.builder().id(1L)
+                .uuid(UUID_EMPLOYEE)
+                .surname(SURNAME)
+                .name(NAME)
+                .middleName(MIDDLE_NAME)
+                .login(INVALID_LOGIN)
+                .generatePassword(GeneratePassword.builder()
+                        .password(VALID_PASSWORD)
+                        .modifiedAt(LocalDateTime.MIN)
+                        .build())
+                .passportId(PASSPORT_ID)
+                .passportDateIssue(LocalDate.now())
+                .role(ADMIN_ROLE)
+                .status(ACTIVE_STATUS)
                 .build();
     }
 }
