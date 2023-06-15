@@ -20,7 +20,7 @@ public class EmployeeCreateDto {
     @Schema(description = "Middle name of employee. Not required")
     private String middleName;
 
-    @NotNull
+    @NotBlank
     @Schema(description = "Role of employee. Cannot be null or empty")
     private String role;
 
