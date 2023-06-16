@@ -34,8 +34,7 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public Employee findEmployeeByLogin(String login) {
-        return employeeJpaRepository.findEmployeeByLogin(login)
-                .orElseThrow(() -> new EmployeeNotFoundException(login));
+    public boolean existByLogin(String login) {
+        return employeeJpaRepository.existsByLogin(login);
     }
 }

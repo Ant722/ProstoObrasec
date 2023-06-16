@@ -56,7 +56,8 @@ public class EmployeeController {
     }
 
     @Operation(
-            summary = "Employee data updating"
+            summary = "Employee data updating",
+            description = "Allows to update information of the employee"
     )
     @ApiResponses(value = {
             @ApiResponse(

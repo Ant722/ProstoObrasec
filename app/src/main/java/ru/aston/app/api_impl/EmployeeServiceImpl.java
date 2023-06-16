@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
-import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.model.Employee;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -33,24 +33,19 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void updateEmployeeInfo(Employee employee, UUID uuid) {
-        try {
-            if (!findEmployeeByLogin(employee.getLogin()).getUuid().equals(uuid)) {
+        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
+        if (!Objects.equals(employeeToUpdate.getLogin(), (employee.getLogin()))) {
+            if (employeeRepository.existByLogin(employee.getLogin())) {
                 log.info("Employee with UUID = ({}) was not updated because login ({}) already " +
                         "belongs to another employee", uuid, employee.getLogin());
                 throw new LoginConflictException();
             }
-        } catch (EmployeeNotFoundException ignored) {
         }
-        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
         employee.setId(employeeToUpdate.getId());
         employee.setUuid(employeeToUpdate.getUuid());
         employee.setPassword(employeeToUpdate.getPassword());
         employee.setCreatedAt(employeeToUpdate.getCreatedAt());
         employeeRepository.save(employee);
         log.info("User with UUID ({}) successfully updated", uuid);
-    }
-
-    private Employee findEmployeeByLogin(String login) {
-        return employeeRepository.findEmployeeByLogin(login);
     }
 }
