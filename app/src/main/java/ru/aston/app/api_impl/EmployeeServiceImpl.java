@@ -91,7 +91,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 searchCriteria.getPage());
         return employeePage;
     }
-}
 
     private Employee findEmployeeByLogin(String login) {
         return employeeRepository.findEmployeeByLogin(login);

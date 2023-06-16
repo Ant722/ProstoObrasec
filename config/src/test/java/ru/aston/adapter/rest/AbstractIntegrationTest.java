@@ -27,6 +27,12 @@ public class AbstractIntegrationTest {
             System.setProperty("SPRING_DATASOURCE_URL", postgres.getJdbcUrl());
             System.setProperty("SPRING_DATASOURCE_USERNAME", postgres.getUsername());
             System.setProperty("SPRING_DATASOURCE_PASSWORD", postgres.getPassword());
+            System.setProperty("SPRING_MAIL_HOST", "SPRING_MAIL_HOST_STUB");
+            System.setProperty("SPRING_MAIL_PORT", "1000");
+            System.setProperty("SPRING_MAIL_EMAIL", "SPRING_MAIL_EMAIL_STUB");
+            System.setProperty("SPRING_MAIL_PASSWORD", "SPRING_MAIL_PASSWORD_STUB");
+            System.setProperty("SPRING_MAIL_EMAIL_SENDER", "SPRING_MAIL_EMAIL_SENDER_STUB");
+            System.setProperty("SPRING_MAIL_EMAIL_POSTFIX", "SPRING_MAIL_EMAIL_POSTFIX_STUB");
         }
     }
 }
