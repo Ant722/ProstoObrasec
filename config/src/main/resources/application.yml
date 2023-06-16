@@ -31,3 +31,6 @@ spring:
   liquibase:
     enabled: 'true'
     change-log: classpath:liquibase/changelog-master.yml
+
+page:
+  default-size: 30

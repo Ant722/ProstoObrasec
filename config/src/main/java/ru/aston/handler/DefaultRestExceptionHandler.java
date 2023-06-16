@@ -1,6 +1,7 @@
 package ru.aston.handler;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     @ExceptionHandler(value = EmployeeNotFoundException.class)
@@ -59,6 +60,15 @@ public class DefaultRestExceptionHandler {
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = ValidationException.class)
+    public ResponseEntity<CustomExceptionResponse> handleValidationException(
+            ValidationException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     private CustomExceptionResponse handle(Exception ex) {

@@ -5,10 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.aston.app.api.services.MailService;
 import ru.aston.app.api.services.EmployeeService;
+import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
+import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.dto.response.PasswordGenerateInfoDto;
 import ru.aston.mapper.EmployeeMapper;
+import ru.aston.mapper.SearchCriteriaMapper;
+import ru.aston.request.EmployeeSearchCriteria;
 import ru.aston.model.Employee;
 
 import java.util.UUID;
@@ -26,6 +30,7 @@ public class EmployeeFacade {
     private final EmployeeService employeeService;
 
     private final EmployeeMapper employeeMapper;
+    private final SearchCriteriaMapper searchCriteriaMapper;
 
     private final MailService mailService;
 
@@ -33,7 +38,6 @@ public class EmployeeFacade {
         return employeeMapper.mapEmployeeToEmployeeInformationDto(
                 employeeService.getEmployeeByUuid(UUID.fromString(uuid)));
     }
-
 
     @Transactional
     public PasswordGenerateInfoDto generatePasswordEmployeeByUuid(String uuid) {
@@ -54,5 +58,12 @@ public class EmployeeFacade {
     public void updateEmployeeInfo(EmployeeUpdateDto employeeUpdateDto, String uuid) {
         Employee employee = employeeMapper.mapEmployeeUpdateDtoToEmployee(employeeUpdateDto);
         employeeService.updateEmployeeInfo(employee, UUID.fromString(uuid));
+    }
+
+    public SearchEmployeeResultDto searchEmployeesByUsername(EmployeeSearchCriteriaDto dto) {
+        EmployeeSearchCriteria searchCriteria = searchCriteriaMapper
+                .mapEmployeeSearchCriteriaDtoToEmployeeSearchCriteriaRequest(dto);
+        return employeeMapper.mapPageToSearchEmployeeResultDto(
+                employeeService.searchEmployeesByUsername(searchCriteria));
     }
 }

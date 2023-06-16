@@ -32,6 +32,7 @@
         <spring.doc.version>2.0.2</spring.doc.version>
         <testcontainers.version>1.17.6</testcontainers.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <querydsl.version>5.0.0</querydsl.version>
     </properties>
     <dependencies>
         <dependency>
@@ -109,6 +110,19 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
         </dependency>
     </dependencies>
     <dependencyManagement>

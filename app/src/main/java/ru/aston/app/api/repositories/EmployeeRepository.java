@@ -1,6 +1,8 @@
 package ru.aston.app.api.repositories;
 
+import org.springframework.data.domain.Page;
 import ru.aston.model.Employee;
+import ru.aston.request.EmployeeSearchCriteria;
 
 import java.util.UUID;
 
@@ -15,4 +17,6 @@ public interface EmployeeRepository {
     Employee save(Employee employee);
 
     Employee findEmployeeByLogin(String login);
+
+    Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria);
 }
