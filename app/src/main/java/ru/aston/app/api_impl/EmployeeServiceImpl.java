@@ -2,12 +2,20 @@ package ru.aston.app.api_impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.exception.LoginConflictException;
+import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
+import ru.aston.model.GeneratePassword;
+import ru.aston.request.EmployeeSearchCriteria;
+import ru.util.PasswordGeneratorUtils;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +36,29 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    @Override
+    public Employee generatePasswordByUuid(UUID uuid) {
+        Employee employee = employeeRepository.findEmployeeByUuid(uuid);
+        GeneratePassword generatePassword = employee.getGeneratePassword();
+        checkTimeGeneratePassword(generatePassword.getModifiedAt());
+        String oldPassword = generatePassword.getPassword();
+        String newPassword = PasswordGeneratorUtils.generatePassword();
+        while (oldPassword.equals(newPassword)) {
+            newPassword = PasswordGeneratorUtils.generatePassword();
+        }
+        generatePassword.setPassword(newPassword);
+        employee.setGeneratePassword(generatePassword);
+        employeeRepository.save(employee);
+        log.info("Password from employee UUID {} generate", employee.getUuid());
+        return employee;
+    }
+
+    private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
+        if (LocalDateTime.now().isBefore(generatePasswordTime.plus(10, ChronoUnit.MINUTES))) {
+            throw new PasswordGenerateTimeException();
+        }
+    }
+
     /**
      * Accepts employee data to update and updates Employee in DB. Checks login uniqueness before updating
      */
@@ -43,9 +74,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         employee.setId(employeeToUpdate.getId());
         employee.setUuid(employeeToUpdate.getUuid());
-        employee.setPassword(employeeToUpdate.getPassword());
+        employee.setGeneratePassword(employeeToUpdate.getGeneratePassword());
         employee.setCreatedAt(employeeToUpdate.getCreatedAt());
         employeeRepository.save(employee);
         log.info("User with UUID ({}) successfully updated", uuid);
     }
+
+    @Override
+    @Transactional(readOnly = true, timeout = 5)
+    public Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria) {
+        Page<Employee> employeePage = employeeRepository.searchEmployeesByUsername(searchCriteria);
+        log.info(
+                "Taken from employee {} records, current page is {}",
+                employeePage.getTotalElements(),
+                searchCriteria.getPage());
+        return employeePage;
+    }
 }
+

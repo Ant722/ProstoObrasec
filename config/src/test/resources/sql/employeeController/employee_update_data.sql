@@ -1,3 +1,8 @@
+INSERT INTO generate_password
+    (id, password)
+VALUES (1, 'password'),
+       (2, 'pass');
+
 CREATE TABLE IF NOT EXISTS employee
 (
     id                  BIGSERIAL PRIMARY KEY,
@@ -15,14 +20,15 @@ CREATE TABLE IF NOT EXISTS employee
     modified_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO employee (uuid, surname, name, middle_name, role, login, password, status, passport_id, passport_date_issue)
+INSERT INTO employee (uuid, surname, name, middle_name, role, login, generate_password_id, status, passport_id,
+                      passport_date_issue)
 VALUES ('9771203f-be0a-4ecf-9ed7-72978a35d201',
         'surname',
         'name',
         'middlename',
         'ADMIN',
         'login',
-        'password66',
+        1,
         'ACTIVE',
         '1111 222333',
         '10.10.2010'),
@@ -32,7 +38,7 @@ VALUES ('9771203f-be0a-4ecf-9ed7-72978a35d201',
         'Petrovich',
         'PRODUCT_MANAGER',
         'i.ivanov',
-        'pass',
+        2,
         'ACTIVE',
         '6666 333666',
         '11.11.2022');

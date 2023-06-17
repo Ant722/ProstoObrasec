@@ -2,6 +2,7 @@ package ru.aston.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,14 +10,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 import ru.aston.model.enumeration.EmployeeRole;
 import ru.aston.model.enumeration.EmployeeStatus;
 
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @Entity
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     /**
@@ -64,14 +66,6 @@ public class Employee {
     private String login;
 
     /**
-     * Password is a part of credentials used to access a service.
-     * Represented as a 20-character string.
-     * Can not be null.
-     */
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    /**
      * Identification number of employees passport.
      * Can not be null.
      */
@@ -110,12 +104,20 @@ public class Employee {
      */
     @Column(name = "created_at")
     @CreationTimestamp
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     /**
      * Time of the last modification. Represent as a timestamp.
      */
     @Column(name = "modified_at")
     @UpdateTimestamp
-    private Instant modifiedAt;
+    private LocalDateTime modifiedAt;
+
+    /**
+     * Password is a part of credentials used to access a service.
+     * Can not be null.
+     */
+    @OneToOne
+    @JoinColumn(name = "generate_password_id", nullable = false)
+    private GeneratePassword generatePassword;
 }

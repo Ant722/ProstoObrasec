@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.facade.EmployeeFacade;
@@ -35,8 +37,8 @@ class EmployeeControllerTest {
     private MockMvc mockMvc;
 
     private static final String EMPLOYEE_INFORMATION_ENDPOINT = "/api/v1/employee/{id}";
-
     private final String EMPLOYEE_UPDATE_ENDPOINT = "/api/v1/employee/{employee_uuid}";
+    private static final String SEARCH_EMPLOYEE_BY_USERNAME_ENDPOINT = "/api/v1/employee";
 
     @BeforeEach
     void setUp() {
@@ -67,6 +69,15 @@ class EmployeeControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @ParameterizedTest
+    @MethodSource("getInvalidSearchRequestStream")
+    void searchEmployeesByUsername_ShouldReturn_400_While_InvalidRequest(MultiValueMap<String, String> paramMap)
+            throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(SEARCH_EMPLOYEE_BY_USERNAME_ENDPOINT)
+                        .params(paramMap))
+                .andExpect(status().isBadRequest());
+    }
+
     private static Stream<String> getInvalidEmployeeIdStream() {
         return Stream.of(
                 "-9",
@@ -75,6 +86,30 @@ class EmployeeControllerTest {
                 "100",
                 "fc581e6g-f87e-11ed-b67e-0242ac120002",
                 "fc581e6e-f87e-11ed-b67e-0242ac1200021");
+    }
+
+    private Stream<MultiValueMap<String, String>> getInvalidSearchRequestStream() {
+        LinkedMultiValueMap<String, String> invalidStatus = new LinkedMultiValueMap<>();
+        invalidStatus.add("status", "invalidStatus");
+        invalidStatus.add("role", "ADMIN");
+        invalidStatus.add("sort", "name");
+        invalidStatus.add("page", "1");
+
+        LinkedMultiValueMap<String, String> invalidRole = new LinkedMultiValueMap<>();
+        invalidRole.add("status", "ACTIVE");
+        invalidRole.add("role", "invalidRole");
+        invalidRole.add("sort", "name");
+        invalidRole.add("page", "1");
+
+        LinkedMultiValueMap<String, String> invalidPage = new LinkedMultiValueMap<>();
+        invalidPage.add("status", "ACTIVE");
+        invalidPage.add("role", "ADMIN");
+        invalidPage.add("sort", "name");
+        invalidPage.add("page", "-1");
+
+        LinkedMultiValueMap<String, String> nullParams = new LinkedMultiValueMap<>();
+
+        return Stream.of(invalidStatus, invalidRole, invalidPage, nullParams);
     }
 
     private MockMvc getMockMvc() {
