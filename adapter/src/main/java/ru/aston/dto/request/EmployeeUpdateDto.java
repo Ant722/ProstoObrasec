@@ -12,11 +12,11 @@ public class EmployeeUpdateDto {
 
     @Schema(description = "New employee status. Can't be null or empty")
     @NotNull(message = "EmployeeStatus must be not null")
-    private EmployeeStatusDto statusDto;
+    private EmployeeStatusDto status;
 
     @Schema(description = "New employee role. Can't be null or empty")
     @NotNull(message = "EmployeeRole must be not null")
-    private EmployeeRoleDto roleDto;
+    private EmployeeRoleDto role;
 
     @Schema(description = "New employee name. Can't be null or empty")
     @NotBlank(message = "Name must be not blank")

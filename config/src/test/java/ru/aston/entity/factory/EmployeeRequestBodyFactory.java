@@ -2,8 +2,8 @@ package ru.aston.entity.factory;
 
 public class EmployeeRequestBodyFactory {
 
-    private String statusDto;
-    private String roleDto;
+    private String status;
+    private String role;
     private String name;
     private String surname;
     private String middleName;
@@ -11,9 +11,9 @@ public class EmployeeRequestBodyFactory {
     private String passport;
     private String passportDateIssue;
 
-    private EmployeeRequestBodyFactory(String statusDto, String roleDto, String name, String surname, String middleName, String login, String passport, String passportDateIssue) {
-        this.statusDto = statusDto;
-        this.roleDto = roleDto;
+    private EmployeeRequestBodyFactory(String status, String role, String name, String surname, String middleName, String login, String passport, String passportDateIssue) {
+        this.status = status;
+        this.role = role;
         this.name = name;
         this.surname = surname;
         this.middleName = middleName;
@@ -61,20 +61,20 @@ public class EmployeeRequestBodyFactory {
         );
     }
 
-    public String getStatusDto() {
-        return statusDto;
+    public String getStatus() {
+        return status;
     }
 
-    public void setStatusDto(String statusDto) {
-        this.statusDto = statusDto;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getRoleDto() {
-        return roleDto;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleDto(String roleDto) {
-        this.roleDto = roleDto;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getName() {

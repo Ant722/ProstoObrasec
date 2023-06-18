@@ -34,8 +34,8 @@ public interface EmployeeMapper {
     @Mappings({
             @Mapping(source = "employeeUpdateDto.passport", target = "passportId"),
             @Mapping(source = "employeeUpdateDto.passportDateIssue", target = "passportDateIssue", dateFormat = DATE_PATTERN_FORMAT),
-            @Mapping(source = "employeeUpdateDto.statusDto.status", target = "status"),
-            @Mapping(source = "employeeUpdateDto.roleDto.role", target = "role")
+            @Mapping(source = "employeeUpdateDto.status.status", target = "status"),
+            @Mapping(source = "employeeUpdateDto.role.role", target = "role")
     })
     Employee mapEmployeeUpdateDtoToEmployee(EmployeeUpdateDto employeeUpdateDto);
 

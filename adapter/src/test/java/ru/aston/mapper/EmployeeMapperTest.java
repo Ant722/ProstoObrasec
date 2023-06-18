@@ -85,8 +85,8 @@ class EmployeeMapperTest {
         dto.setLogin("employeeLogin");
         dto.setPassport("100");
         dto.setPassportDateIssue("01.01.2023");
-        dto.setRoleDto(new EmployeeRoleDto("ADMIN"));
-        dto.setStatusDto(new EmployeeStatusDto("ACTIVE"));
+        dto.setRole(new EmployeeRoleDto("ADMIN"));
+        dto.setStatus(new EmployeeStatusDto("ACTIVE"));
         return dto;
     }
 }
