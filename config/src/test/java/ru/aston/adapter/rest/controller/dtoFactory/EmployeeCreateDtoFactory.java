@@ -2,6 +2,8 @@ package ru.aston.adapter.rest.controller.dtoFactory;
 
 import lombok.experimental.UtilityClass;
 import ru.aston.dto.request.EmployeeCreateDto;
+import ru.aston.dto.request.EmployeeRoleDto;
+import ru.aston.dto.request.EmployeeStatusDto;
 
 @UtilityClass
 public class EmployeeCreateDtoFactory {
@@ -11,8 +13,8 @@ public class EmployeeCreateDtoFactory {
     private static final String VALID_NAME = "Name";
     private static final String VALID_SURNAME = "Surname";
     private static final String VALID_MIDDLE_NAME = "Middlename";
-    private static final String VALID_ROLE = "ADMIN";
-    private static final String VALID_STATUS = "ACTIVE";
+    private static final EmployeeRoleDto VALID_ROLE = new EmployeeRoleDto("ADMIN");
+    private static final EmployeeStatusDto VALID_STATUS = new EmployeeStatusDto("ACTIVE");
     private static final String VALID_PASSPORT_ID = "129349RI";
     private static final String VALID_PASSPORT_DATE_ISSUE = "2023-01-01";
     public static EmployeeCreateDto getValidRegistrationEmployeeRequestDto(){

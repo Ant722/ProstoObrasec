@@ -13,8 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.aston.adapter.rest.JsonStringConverter;
-import ru.aston.adapter.rest.controller.dtoFactory.EmployeeCreateDtoFactory;
 import ru.aston.dto.request.EmployeeCreateDto;
+import ru.aston.entity.factory.EmployeeRegisteredRequestBodyFactory;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.facade.EmployeeFacade;
 import ru.aston.rest.controller.EmployeeController;
@@ -25,7 +25,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static ru.aston.adapter.rest.controller.dtoFactory.EmployeeCreateDtoFactory.getValidRegistrationEmployeeRequestDto;
 
 @WebMvcTest(EmployeeController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,7 +39,7 @@ class EmployeeControllerTest {
 
 
 
-    private static final String REGISTRATION_EMPLOYEE_ENDPOINT = "/api/v1/employee/";
+    private static final String REGISTRATION_EMPLOYEE_ENDPOINT = "/api/v1/employee";
     private static final String EMPLOYEE_INFORMATION_ENDPOINT = "/api/v1/employee/{id}";
 
     @BeforeEach
@@ -71,7 +70,7 @@ class EmployeeControllerTest {
 
     @Test
     void createNewEmployee_ShouldReturn200_WhenAddNewEmployee() throws Exception {
-        EmployeeCreateDto createDto = getValidRegistrationEmployeeRequestDto();
+        EmployeeRegisteredRequestBodyFactory createDto = EmployeeRegisteredRequestBodyFactory.getValidRegistrationEmployeeRequestDto();
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
                 contentType(MediaType.APPLICATION_JSON).
                 content(JsonStringConverter.asJsonString(createDto));
@@ -81,21 +80,22 @@ class EmployeeControllerTest {
 
     @Test
     void createNewEmployee_ShouldReturn409_WhenInvalidLogin() throws Exception{
-        EmployeeCreateDto dto = EmployeeCreateDtoFactory.getRegistrationEmployeeRequestDtoInvalidLogin();
+        String json = JsonStringConverter.asJsonString(EmployeeRegisteredRequestBodyFactory.getRegistrationEmployeeRequestDtoExistedLogin());
+        EmployeeCreateDto dto = JsonStringConverter.jsonToObject(json, EmployeeCreateDto.class);
         doThrow(LoginConflictException.class).when(employeeFacade).createNewEmployee(dto);
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
                 contentType(MediaType.APPLICATION_JSON).
-                content(JsonStringConverter.asJsonString(dto));
+                content(json);
         this.mockMvc.perform(builder)
                 .andExpect(status().isConflict());
     }
 
     @Test
     void createNewEmployee_ShouldReturn400_WhenInvalidCreateEmployeeDto() throws Exception {
-        EmployeeCreateDto dto = EmployeeCreateDtoFactory.getInvalidCreateEmployeeDto();
+        EmployeeRegisteredRequestBodyFactory body = EmployeeRegisteredRequestBodyFactory.getRegistrationEmployeeRequestDtoInvalidLogin();
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
                 contentType(MediaType.APPLICATION_JSON).
-                content(JsonStringConverter.asJsonString(dto));
+                content(JsonStringConverter.asJsonString(body));
         this.mockMvc.perform(builder)
                 .andExpect(status().isBadRequest());
     }
