@@ -48,7 +48,7 @@ public class DefaultRestExceptionHandler {
     }
 
     @ExceptionHandler(value = LoginConflictException.class)
-    public ResponseEntity<CustomExceptionResponse> handleLoginConflictException(LoginConflictException ex){
+    public ResponseEntity<CustomExceptionResponse> handleLoginConflictException(LoginConflictException ex) {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage,ex);

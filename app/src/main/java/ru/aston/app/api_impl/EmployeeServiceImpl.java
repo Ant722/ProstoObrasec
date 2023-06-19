@@ -61,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employeeRepository.existByPassportId(employee.getPassportId())){
             log.info("Employee with passport id = ({}) was not created because this passport" +
                     " id used another employee",employee.getPassportId());
-            throw new PassportIdConflictException();
+            throw new PassportIdConflictException(employee.getPassportId());
         }
 
         employee.setUuid(uuid);
