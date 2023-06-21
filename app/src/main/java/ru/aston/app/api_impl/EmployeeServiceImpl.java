@@ -8,7 +8,6 @@ import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.repositories.GeneratePasswordRepository;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.app.api.services.MailService;
-import ru.aston.exception.EmployeeNotFoundByPassportIdException;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.exception.PassportIdConflictException;
@@ -45,24 +44,15 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     @Transactional
-    public void createNewEmployee(Employee employee) {
+    public String createNewEmployee(Employee employee) {
         UUID uuid = UUID.randomUUID();
 
         while (employeeRepository.existByUuid(uuid)){
             uuid = UUID.randomUUID();
         }
 
-        if(employeeRepository.existByLogin(employee.getLogin())) {
-            log.info("Employee with login = ({}) was not created because this login already " +
-                    "belongs to another employee", employee.getLogin());
-            throw new LoginConflictException();
-        }
-
-        if(employeeRepository.existByPassportId(employee.getPassportId())){
-            log.info("Employee with passport id = ({}) was not created because this passport" +
-                    " id used another employee",employee.getPassportId());
-            throw new PassportIdConflictException(employee.getPassportId());
-        }
+        checkExistedLogin(employee.getLogin());
+        checkExistedPassportId(employee.getPassportId());
 
         employee.setUuid(uuid);
         String password = PasswordGeneratorUtils.generatePassword();
@@ -73,6 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
         mailService.sendSimpleEmailFromGeneratePassword(employee);
         log.info("New employee with login ({}) was registered",employee.getLogin());
+        return uuid.toString();
     }
 
 
@@ -124,6 +115,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
         if (LocalDateTime.now().isBefore(generatePasswordTime.plus(10, ChronoUnit.MINUTES))) {
             throw new PasswordGenerateTimeException();
+        }
+    }
+
+    private void checkExistedLogin(String login){
+        if(employeeRepository.existByLogin(login)) {
+            log.info("Employee with login = ({}) was not created because this login already " +
+                    "belongs to another employee", login);
+            throw new LoginConflictException();
+        }
+    }
+
+    private void checkExistedPassportId(String passportId){
+        if(employeeRepository.existByPassportId(passportId)){
+            log.info("Employee with passport id = ({}) was not created because this passport" +
+                    " id used another employee",passportId);
+            throw new PassportIdConflictException(passportId);
         }
     }
 }

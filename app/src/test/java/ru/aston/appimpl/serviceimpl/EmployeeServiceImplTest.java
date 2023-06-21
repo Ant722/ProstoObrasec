@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.aston.app.api.repositories.EmployeeRepository;
-import ru.aston.app.api.repositories.GeneratePasswordRepository;
 import ru.aston.app.api_impl.EmployeeServiceImpl;
 import ru.aston.app.api_impl.MailServiceImpl;
 import ru.aston.appimpl.serviceimpl.entity_factory.EmployeeFactory;
@@ -35,11 +34,7 @@ public class EmployeeServiceImplTest {
     private EmployeeServiceImpl employeeService;
 
     @Mock
-    MailServiceImpl mailService;
-
-    @Mock
-    GeneratePasswordRepository passwordRepository;
-
+    private MailServiceImpl mailService;
 
     private static final UUID UUID_EMPLOYEE = UUID.fromString("fe0d0744-fe15-11ed-be56-0242ac120002");
 

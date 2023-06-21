@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.aston.dto.request.EmployeeCreateDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
+import ru.aston.dto.response.UuidResponseDto;
 import ru.aston.facade.EmployeeFacade;
 
 import static ru.aston.util.ValidationConstants.UUID_PATTERN;
@@ -121,12 +122,11 @@ public class EmployeeController {
                             description = "INTERNAL SERVER ERROR",
                             content = @Content)
             })
-    @PostMapping()
-    public ResponseEntity<Void> createNewEmployee(
+    @PostMapping
+    public ResponseEntity<UuidResponseDto> createNewEmployee(
             @Valid
             @Parameter(description = "Employee registered dto")
             @RequestBody EmployeeCreateDto employeeDto){
-            employeeFacade.createNewEmployee(employeeDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(employeeFacade.createNewEmployee(employeeDto));
     }
 }

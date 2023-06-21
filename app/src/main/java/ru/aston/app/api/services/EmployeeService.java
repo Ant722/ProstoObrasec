@@ -11,7 +11,7 @@ public interface EmployeeService {
 
     Employee getEmployeeByUuid(UUID uuid);
 
-    void createNewEmployee(Employee employee);
+    String createNewEmployee(Employee employee);
 
     void updateEmployeeInfo(Employee employee, UUID uuid);
 

@@ -9,6 +9,7 @@ import ru.aston.dto.request.EmployeeCreateDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.PasswordGenerateInfoDto;
+import ru.aston.dto.response.UuidResponseDto;
 import ru.aston.mapper.EmployeeMapper;
 import ru.aston.model.Employee;
 
@@ -34,9 +35,9 @@ public class EmployeeFacade {
                 employeeService.getEmployeeByUuid(UUID.fromString(uuid)));
     }
 
-    public void createNewEmployee(EmployeeCreateDto employeeCreateDto){
+    public UuidResponseDto createNewEmployee(EmployeeCreateDto employeeCreateDto){
         Employee employee = employeeMapper.mapEmployeeCreateDtoToEmployee(employeeCreateDto);
-        employeeService.createNewEmployee(employee);
+        return new UuidResponseDto(employeeService.createNewEmployee(employee));
     }
 
     /**

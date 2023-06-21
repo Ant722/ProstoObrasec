@@ -70,7 +70,8 @@ class EmployeeControllerTest {
 
     @Test
     void createNewEmployee_ShouldReturn200_WhenAddNewEmployee() throws Exception {
-        EmployeeRegisteredRequestBodyFactory createDto = EmployeeRegisteredRequestBodyFactory.getValidRegistrationEmployeeRequestDto();
+        EmployeeRegisteredRequestBodyFactory createDto = EmployeeRegisteredRequestBodyFactory
+                .getValidRegistrationEmployeeRequestDto();
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
                 contentType(MediaType.APPLICATION_JSON).
                 content(JsonStringConverter.asJsonString(createDto));
@@ -80,7 +81,8 @@ class EmployeeControllerTest {
 
     @Test
     void createNewEmployee_ShouldReturn409_WhenInvalidLogin() throws Exception{
-        String json = JsonStringConverter.asJsonString(EmployeeRegisteredRequestBodyFactory.getRegistrationEmployeeRequestDtoExistedLogin());
+        String json = JsonStringConverter.asJsonString(EmployeeRegisteredRequestBodyFactory
+                .getRegistrationEmployeeRequestDtoExistedLogin());
         EmployeeCreateDto dto = JsonStringConverter.jsonToObject(json, EmployeeCreateDto.class);
         doThrow(LoginConflictException.class).when(employeeFacade).createNewEmployee(dto);
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
@@ -92,7 +94,8 @@ class EmployeeControllerTest {
 
     @Test
     void createNewEmployee_ShouldReturn400_WhenInvalidCreateEmployeeDto() throws Exception {
-        EmployeeRegisteredRequestBodyFactory body = EmployeeRegisteredRequestBodyFactory.getRegistrationEmployeeRequestDtoInvalidLogin();
+        EmployeeRegisteredRequestBodyFactory body = EmployeeRegisteredRequestBodyFactory
+                .getRegistrationEmployeeRequestDtoInvalidLogin();
         var builder = post(REGISTRATION_EMPLOYEE_ENDPOINT).
                 contentType(MediaType.APPLICATION_JSON).
                 content(JsonStringConverter.asJsonString(body));
