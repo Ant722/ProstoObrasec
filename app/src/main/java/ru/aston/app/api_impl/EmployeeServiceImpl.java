@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
+import ru.aston.app.api.repositories.GeneratePasswordRepository;
 import ru.aston.app.api.services.EmployeeService;
+import ru.aston.app.api.services.MailService;
 import ru.aston.exception.LoginConflictException;
+import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
 import ru.aston.model.GeneratePassword;
@@ -28,6 +31,8 @@ import java.util.UUID;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final GeneratePasswordRepository generatePasswordRepository;
+    private final MailService mailService;
 
     @Override
     public Employee getEmployeeByUuid(UUID uuid) {
@@ -51,12 +56,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employee);
         log.info("Password from employee UUID {} generate", employee.getUuid());
         return employee;
-    }
-
-    private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
-        if (LocalDateTime.now().isBefore(generatePasswordTime.plus(10, ChronoUnit.MINUTES))) {
-            throw new PasswordGenerateTimeException();
-        }
     }
 
     /**
@@ -89,6 +88,59 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeePage.getTotalElements(),
                 searchCriteria.getPage());
         return employeePage;
+    }
+
+    /**
+     * Accepts employee data to create Employee in DB. Checks uuid, login and passport id uniqueness before creating
+     */
+    @Override
+    @Transactional
+    public String createNewEmployee(Employee employee) {
+        UUID uuid = UUID.randomUUID();
+
+        while (employeeRepository.existByUuid(uuid)){
+            uuid = UUID.randomUUID();
+        }
+
+        checkExistedLogin(employee.getLogin());
+        checkExistedPassportId(employee.getPassportId());
+
+        employee.setUuid(uuid);
+        String password = PasswordGeneratorUtils.generatePassword();
+        GeneratePassword generatePassword = new GeneratePassword();
+        generatePassword.setPassword(password);
+        employee.setGeneratePassword(generatePassword);
+        generatePasswordRepository.save(generatePassword);
+        employeeRepository.save(employee);
+        mailService.sendSimpleEmailFromGeneratePassword(employee);
+        log.info("New employee with login ({}) was registered",employee.getLogin());
+        return uuid.toString();
+    }
+
+    private Employee findEmployeeByLogin(String login) {
+        return employeeRepository.findEmployeeByLogin(login);
+    }
+
+    private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
+        if (LocalDateTime.now().isBefore(generatePasswordTime.plus(10, ChronoUnit.MINUTES))) {
+            throw new PasswordGenerateTimeException();
+        }
+    }
+
+    private void checkExistedLogin(String login){
+        if(employeeRepository.existByLogin(login)) {
+            log.info("Employee with login = ({}) was not created because this login already " +
+                    "belongs to another employee", login);
+            throw new LoginConflictException();
+        }
+    }
+
+    private void checkExistedPassportId(String passportId){
+        if(employeeRepository.existByPassportId(passportId)){
+            log.info("Employee with passport id = ({}) was not created because this passport" +
+                    " id used another employee",passportId);
+            throw new PassportIdConflictException(passportId);
+        }
     }
 }
 

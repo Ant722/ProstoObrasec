@@ -13,8 +13,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.aston.exception.EmployeeNotFoundByPassportIdException;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
+import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 
 import java.time.Instant;
@@ -40,6 +42,22 @@ public class DefaultRestExceptionHandler {
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = EmployeeNotFoundByPassportIdException.class)
+    public ResponseEntity<CustomExceptionResponse> handleEmployeeNotFoundByPassportIdException(EmployeeNotFoundByPassportIdException ex){
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage,ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = PassportIdConflictException.class)
+    public ResponseEntity<CustomExceptionResponse> handlePassportIdConflictException(PassportIdConflictException ex){
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage,ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
     }
 
     @ExceptionHandler(value = MailSendException.class)

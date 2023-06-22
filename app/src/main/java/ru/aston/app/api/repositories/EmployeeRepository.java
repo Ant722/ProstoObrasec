@@ -14,9 +14,17 @@ public interface EmployeeRepository {
 
     Employee findEmployeeByUuid(UUID uuid);
 
+    Employee findEmployeeByLogin(String login);
+
+    Employee findEmployeeByPassportId(String passportId);
+
     Employee save(Employee employee);
 
+    boolean existByUuid(UUID uuid);
+
     boolean existByLogin(String login);
+
+    boolean existByPassportId(String passportId);
 
     Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria);
 }

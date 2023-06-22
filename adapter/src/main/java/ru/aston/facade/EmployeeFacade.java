@@ -4,11 +4,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.aston.app.api.services.EmployeeService;
+import ru.aston.dto.request.EmployeeCreateDto;
 import ru.aston.app.api.services.MailService;
 import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.PasswordGenerateInfoDto;
+import ru.aston.dto.response.UuidResponseDto;
 import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.mapper.EmployeeMapper;
 import ru.aston.mapper.SearchCriteriaMapper;
@@ -65,5 +67,10 @@ public class EmployeeFacade {
                 .mapEmployeeSearchCriteriaDtoToEmployeeSearchCriteriaRequest(dto);
         return employeeMapper.mapPageToSearchEmployeeResultDto(
                 employeeService.searchEmployeesByUsername(searchCriteria));
+    }
+
+    public UuidResponseDto createNewEmployee(EmployeeCreateDto employeeCreateDto){
+        Employee employee = employeeMapper.mapEmployeeCreateDtoToEmployee(employeeCreateDto);
+        return new UuidResponseDto(employeeService.createNewEmployee(employee));
     }
 }

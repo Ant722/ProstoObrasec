@@ -15,7 +15,10 @@ public interface EmployeeService {
 
     Employee generatePasswordByUuid(UUID uuid);
 
+    String createNewEmployee(Employee employee);
+
     void updateEmployeeInfo(Employee employee, UUID uuid);
 
     Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria);
+
 }

@@ -3,6 +3,7 @@ package ru.aston.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import ru.aston.dto.request.EmployeeCreateDto;
 import org.springframework.data.domain.Page;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
@@ -30,6 +31,14 @@ public interface EmployeeMapper {
     @Mapping(target = "result", source = "page.content")
     @Mapping(target = "info", source = "page")
     SearchEmployeeResultDto mapPageToSearchEmployeeResultDto(Page<Employee> page);
+
+    @Mappings({
+            @Mapping(source = "employeeCreateDto.passportDateIssue", target = "passportDateIssue", dateFormat = DATE_PATTERN_FORMAT),
+            @Mapping(source = "employeeCreateDto.status.status", target = "status"),
+            @Mapping(source = "employeeCreateDto.role.role", target = "role")
+    })
+    Employee mapEmployeeCreateDtoToEmployee(EmployeeCreateDto employeeCreateDto);
+
 
     @Mappings({
             @Mapping(source = "employeeUpdateDto.passport", target = "passportId"),
