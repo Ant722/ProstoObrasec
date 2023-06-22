@@ -18,7 +18,7 @@ public interface EmployeeRepository {
 
     Employee findEmployeeByPassportId(String passportId);
 
-    void save(Employee employee);
+    Employee save(Employee employee);
 
     boolean existByUuid(UUID uuid);
 

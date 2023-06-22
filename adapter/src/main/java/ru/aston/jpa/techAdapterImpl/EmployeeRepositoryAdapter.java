@@ -49,12 +49,6 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public Employee findEmployeeByLogin(String login) {
-        return employeeJpaRepository.findEmployeeByLogin(login)
-                .orElseThrow(() -> new EmployeeNotFoundException(login));
-    }
-
-    @Override
     public Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria) {
         QEmployee employee = QEmployee.employee;
         String surname = searchCriteria.getSurname();
@@ -76,6 +70,12 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     public Employee findEmployeeByPassportId(String passportId) {
         return employeeJpaRepository.findEmployeeByPassportId(passportId)
                 .orElseThrow(()-> new EmployeeNotFoundByPassportIdException(passportId));
+    }
+
+    @Override
+    public Employee findEmployeeByLogin(String login) {
+        return employeeJpaRepository.findEmployeeByLogin(login)
+                .orElseThrow(() -> new EmployeeNotFoundException(login));
     }
 
     @Override
