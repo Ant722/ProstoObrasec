@@ -4,7 +4,7 @@ ALTER TABLE employee
 CREATE TABLE generate_password
 (
     id          BIGSERIAL PRIMARY KEY,
-    password    VARCHAR(20) NOT NULL,
+    password    VARCHAR(20)                         NOT NULL,
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 

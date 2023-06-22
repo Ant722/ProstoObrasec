@@ -2,22 +2,24 @@ package ru.aston.app.api_impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.app.api.repositories.GeneratePasswordRepository;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.app.api.services.MailService;
-import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
 import ru.aston.model.GeneratePassword;
+import ru.aston.request.EmployeeSearchCriteria;
 import ru.util.PasswordGeneratorUtils;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -37,6 +39,55 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findEmployeeByUuid(uuid);
         log.info("Taken from employee with UUID {}", employee.getUuid());
         return employee;
+    }
+
+    @Override
+    public Employee generatePasswordByUuid(UUID uuid) {
+        Employee employee = employeeRepository.findEmployeeByUuid(uuid);
+        GeneratePassword generatePassword = employee.getGeneratePassword();
+        checkTimeGeneratePassword(generatePassword.getModifiedAt());
+        String oldPassword = generatePassword.getPassword();
+        String newPassword = PasswordGeneratorUtils.generatePassword();
+        while (oldPassword.equals(newPassword)) {
+            newPassword = PasswordGeneratorUtils.generatePassword();
+        }
+        generatePassword.setPassword(newPassword);
+        employee.setGeneratePassword(generatePassword);
+        employeeRepository.save(employee);
+        log.info("Password from employee UUID {} generate", employee.getUuid());
+        return employee;
+    }
+
+    /**
+     * Accepts employee data to update and updates Employee in DB. Checks login uniqueness before updating
+     */
+    @Override
+    public void updateEmployeeInfo(Employee employee, UUID uuid) {
+        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
+        if (!Objects.equals(employeeToUpdate.getLogin(), (employee.getLogin()))) {
+            if (employeeRepository.existByLogin(employee.getLogin())) {
+                log.info("Employee with UUID = ({}) was not updated because login ({}) already " +
+                        "belongs to another employee", uuid, employee.getLogin());
+                throw new LoginConflictException();
+            }
+        }
+        employee.setId(employeeToUpdate.getId());
+        employee.setUuid(employeeToUpdate.getUuid());
+        employee.setGeneratePassword(employeeToUpdate.getGeneratePassword());
+        employee.setCreatedAt(employeeToUpdate.getCreatedAt());
+        employeeRepository.save(employee);
+        log.info("User with UUID ({}) successfully updated", uuid);
+    }
+
+    @Override
+    @Transactional(readOnly = true, timeout = 5)
+    public Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria) {
+        Page<Employee> employeePage = employeeRepository.searchEmployeesByUsername(searchCriteria);
+        log.info(
+                "Taken from employee {} records, current page is {}",
+                employeePage.getTotalElements(),
+                searchCriteria.getPage());
+        return employeePage;
     }
 
     /**
@@ -66,50 +117,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return uuid.toString();
     }
 
-
-    /**
-     * Accepts employee data to update and updates Employee in DB. Checks login uniqueness before updating
-     */
-    @Override
-    public void updateEmployeeInfo(Employee employee, UUID uuid) {
-        try {
-            if (!findEmployeeByLogin(employee.getLogin()).getUuid().equals(uuid)) {
-                log.info("Employee with UUID = ({}) was not updated because login ({}) already " +
-                        "belongs to another employee", uuid, employee.getLogin());
-                throw new LoginConflictException();
-            }
-        } catch (EmployeeNotFoundException ignored) {
-        }
-        Employee employeeToUpdate = employeeRepository.findEmployeeByUuid(uuid);
-        employee.setId(employeeToUpdate.getId());
-        employee.setUuid(employeeToUpdate.getUuid());
-        employee.setGeneratePassword(employeeToUpdate.getGeneratePassword());
-        employee.setCreatedAt(employeeToUpdate.getCreatedAt());
-
-        employeeRepository.save(employee);
-        log.info("User with UUID ({}) successfully updated", uuid);
-    }
-
     private Employee findEmployeeByLogin(String login) {
         return employeeRepository.findEmployeeByLogin(login);
-    }
-
-
-    @Override
-    public Employee generatePasswordByUuid(UUID uuid) {
-        Employee employee = employeeRepository.findEmployeeByUuid(uuid);
-        GeneratePassword generatePassword = employee.getGeneratePassword();
-        checkTimeGeneratePassword(generatePassword.getModifiedAt());
-        String oldPassword = generatePassword.getPassword();
-        String newPassword = PasswordGeneratorUtils.generatePassword();
-        while (oldPassword.equals(newPassword)) {
-            newPassword = PasswordGeneratorUtils.generatePassword();
-        }
-        generatePassword.setPassword(newPassword);
-        employee.setGeneratePassword(generatePassword);
-        employeeRepository.save(employee);
-        log.info("Password from employee UUID {} generate", employee.getUuid());
-        return employee;
     }
 
     private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
@@ -134,3 +143,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 }
+

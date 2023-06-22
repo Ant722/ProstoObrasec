@@ -1,7 +1,6 @@
 package ru.aston.model;
 
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -83,6 +82,7 @@ public class Employee {
     /**
      * Employee role.
      * Can not be null.
+     *
      * @see EmployeeRole
      */
     @Column(name = "role", nullable = false)
@@ -92,6 +92,7 @@ public class Employee {
     /**
      * Employee status.
      * Can not be null.
+     *
      * @see EmployeeStatus
      */
     @Column(name = "status", nullable = false)
@@ -119,5 +120,4 @@ public class Employee {
     @OneToOne
     @JoinColumn(name = "generate_password_id", nullable = false)
     private GeneratePassword generatePassword;
-
 }

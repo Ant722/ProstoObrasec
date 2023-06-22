@@ -3,30 +3,36 @@ package ru.aston.facade;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.aston.app.api.services.MailService;
 import ru.aston.app.api.services.EmployeeService;
 import ru.aston.dto.request.EmployeeCreateDto;
+import ru.aston.app.api.services.MailService;
+import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.PasswordGenerateInfoDto;
 import ru.aston.dto.response.UuidResponseDto;
+import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.mapper.EmployeeMapper;
+import ru.aston.mapper.SearchCriteriaMapper;
 import ru.aston.model.Employee;
+import ru.aston.request.EmployeeSearchCriteria;
 
 import java.util.UUID;
+
 
 /**
  * Contains different logics for operations with Employee between controllers and services
  *
  * @see EmployeeService
  */
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class EmployeeFacade {
 
     private final EmployeeService employeeService;
 
     private final EmployeeMapper employeeMapper;
+    private final SearchCriteriaMapper searchCriteriaMapper;
 
     private final MailService mailService;
 
@@ -35,9 +41,17 @@ public class EmployeeFacade {
                 employeeService.getEmployeeByUuid(UUID.fromString(uuid)));
     }
 
-    public UuidResponseDto createNewEmployee(EmployeeCreateDto employeeCreateDto){
-        Employee employee = employeeMapper.mapEmployeeCreateDtoToEmployee(employeeCreateDto);
-        return new UuidResponseDto(employeeService.createNewEmployee(employee));
+    @Transactional
+    public PasswordGenerateInfoDto generatePasswordEmployeeByUuid(String uuid) {
+        Employee employee = employeeService.generatePasswordByUuid(UUID.fromString(uuid));
+        mailService.sendSimpleEmailFromGeneratePassword(employee);
+        return getPasswordGenerateInfoDto(uuid);
+    }
+
+    private PasswordGenerateInfoDto getPasswordGenerateInfoDto(String uuid) {
+        return PasswordGenerateInfoDto.builder()
+                .message(String.format("The new password has been generated and sent to the %s by e-mail", uuid))
+                .build();
     }
 
     /**
@@ -48,16 +62,15 @@ public class EmployeeFacade {
         employeeService.updateEmployeeInfo(employee, UUID.fromString(uuid));
     }
 
-    @Transactional
-    public PasswordGenerateInfoDto generatePasswordEmployeeByUuid(String uuid)   {
-        Employee employee = employeeService.generatePasswordByUuid(UUID.fromString(uuid));
-        mailService.sendSimpleEmailFromGeneratePassword(employee);
-        return getPasswordGenerateInfoDto(uuid);
+    public SearchEmployeeResultDto searchEmployeesByUsername(EmployeeSearchCriteriaDto dto) {
+        EmployeeSearchCriteria searchCriteria = searchCriteriaMapper
+                .mapEmployeeSearchCriteriaDtoToEmployeeSearchCriteriaRequest(dto);
+        return employeeMapper.mapPageToSearchEmployeeResultDto(
+                employeeService.searchEmployeesByUsername(searchCriteria));
     }
 
-    private PasswordGenerateInfoDto getPasswordGenerateInfoDto(String uuid) {
-        return PasswordGenerateInfoDto.builder()
-                .message(String.format("The new password has been generated and sent to the %s by e-mail", uuid))
-                .build();
+    public UuidResponseDto createNewEmployee(EmployeeCreateDto employeeCreateDto){
+        Employee employee = employeeMapper.mapEmployeeCreateDtoToEmployee(employeeCreateDto);
+        return new UuidResponseDto(employeeService.createNewEmployee(employee));
     }
 }

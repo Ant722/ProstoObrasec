@@ -1,12 +1,16 @@
 package ru.aston.handler;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mail.MailSendException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.aston.exception.EmployeeNotFoundByPassportIdException;
@@ -16,6 +20,7 @@ import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 @Slf4j
@@ -27,7 +32,7 @@ public class DefaultRestExceptionHandler {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     @ExceptionHandler(value = EmployeeNotFoundException.class)
@@ -41,14 +46,6 @@ public class DefaultRestExceptionHandler {
 
     @ExceptionHandler(value = EmployeeNotFoundByPassportIdException.class)
     public ResponseEntity<CustomExceptionResponse> handleEmployeeNotFoundByPassportIdException(EmployeeNotFoundByPassportIdException ex){
-        String exceptionMessage = ex.getMessage();
-        log.error(exceptionMessage);
-        log.trace(exceptionMessage,ex);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
-    }
-
-    @ExceptionHandler(value = LoginConflictException.class)
-    public ResponseEntity<CustomExceptionResponse> handleLoginConflictException(LoginConflictException ex) {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage,ex);
@@ -77,6 +74,55 @@ public class DefaultRestExceptionHandler {
         log.error(exceptionMessage);
         log.error(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = LoginConflictException.class)
+    public ResponseEntity<CustomExceptionResponse> handleLoginConflictException(LoginConflictException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<CustomExceptionResponse> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex) {
+        FieldError message = ex.getBindingResult().getFieldError();
+
+        CustomExceptionResponse cer = new CustomExceptionResponse(
+                message != null ? message.getDefaultMessage() : "Unknown error at MethodArgumentNotValidException"
+        );
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cer);
+    }
+
+    @ExceptionHandler(value = DateTimeParseException.class)
+    public ResponseEntity<CustomExceptionResponse> handleDateTimeParseException(DateTimeParseException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResponseEntity<CustomExceptionResponse> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
+    }
+
+
+    @ExceptionHandler(value = ValidationException.class)
+    public ResponseEntity<CustomExceptionResponse> handleValidationException(
+            ValidationException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
     }
 
     private CustomExceptionResponse handle(Exception ex) {

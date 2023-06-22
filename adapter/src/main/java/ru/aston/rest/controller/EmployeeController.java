@@ -9,13 +9,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.aston.dto.request.EmployeeCreateDto;
+import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.UuidResponseDto;
+import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.facade.EmployeeFacade;
 
 import static ru.aston.util.ValidationConstants.UUID_PATTERN;
@@ -59,7 +62,8 @@ public class EmployeeController {
     }
 
     @Operation(
-            summary = "Employee data updating"
+            summary = "Employee data updating",
+            description = "Allows to update information of the employee"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -93,6 +97,30 @@ public class EmployeeController {
     ) {
         employeeFacade.updateEmployeeInfo(dto, uuid);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            summary = "Search employees by partial surname match with sort and filter",
+            description = "Allows to get information of the employees")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "The information of the employees has successfully returned",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid request parameters",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Internal server error",
+                            content = @Content)
+            })
+    @GetMapping
+    public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(
+            @Valid @ParameterObject EmployeeSearchCriteriaDto dto) {
+        return ResponseEntity.ok(employeeFacade.searchEmployeesByUsername(dto));
     }
 
     @Operation(
