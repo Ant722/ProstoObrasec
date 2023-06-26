@@ -70,10 +70,8 @@ public class DefaultRestExceptionHandler {
     public ResponseEntity<CustomExceptionResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex) {
         FieldError message = ex.getBindingResult().getFieldError();
-
         CustomExceptionResponse cer = new CustomExceptionResponse(
-                message != null ? message.getDefaultMessage() : "Unknown error at MethodArgumentNotValidException"
-        );
+                message != null ? message.getDefaultMessage() : "Unknown error at MethodArgumentNotValidException");
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
