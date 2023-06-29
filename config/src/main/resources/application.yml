@@ -12,25 +12,30 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+
   mail:
-    host: ${SPRING_MAIL_HOST}
-    port: ${SPRING_MAIL_PORT}
-    username: ${SPRING_MAIL_EMAIL}
-    password: ${SPRING_MAIL_PASSWORD}
+    host: smtp.mail.ru
+    port: 587
+    username: mailto:myemail@example.com
+    password: myemailpassword
     properties:
       mail:
         smtp:
-          auth: true
+          auth: false
           starttls:
             enable: true
     sender:
-      email: ${SPRING_MAIL_EMAIL_SENDER}
+      email: mailto:sender@mail.ru
     recipient:
-      postfix-email: ${SPRING_MAIL_EMAIL_POSTFIX}
+      postfix-email: "@mail.ru"
 
   liquibase:
     enabled: 'true'
     change-log: classpath:liquibase/changelog-master.yml
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}
 page:
   default-size: 30

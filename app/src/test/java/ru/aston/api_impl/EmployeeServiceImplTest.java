@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.aston.api_impl.entity_factory.EmployeeFactory;
-import ru.aston.app.api.repositories.EmployeeRepository;
-import ru.aston.app.api_impl.EmployeeServiceImpl;
+import ru.aston.repositories.EmployeeRepository;
 import ru.aston.exception.LoginConflictException;
+import ru.aston.services.api_impl.EmployeeServiceImpl;
 
 import java.util.UUID;
 

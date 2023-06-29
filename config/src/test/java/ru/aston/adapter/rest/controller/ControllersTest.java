@@ -32,7 +32,7 @@ import static ru.aston.JsonStringConverter.asJsonString;
 
 @WebMvcTest(EmployeeController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class EmployeeControllerTest {
+class ControllersTest {
 
     @MockBean
     private EmployeeFacade employeeFacade;
@@ -157,9 +157,5 @@ class EmployeeControllerTest {
         this.mockMvc.perform(builder)
                 .andExpect(status().isBadRequest());
     }
-
-
-
-
 }
 

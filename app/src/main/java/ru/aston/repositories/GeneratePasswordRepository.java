@@ -1,4 +1,4 @@
-package ru.aston.app.api.repositories;
+package ru.aston.repositories;
 
 import ru.aston.model.GeneratePassword;
 

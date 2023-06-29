@@ -19,6 +19,8 @@ import ru.aston.exception.LoginConflictException;
 import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 
+import ru.aston.exception.WrongPasswordException;
+
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 
@@ -45,18 +47,18 @@ public class DefaultRestExceptionHandler {
     }
 
     @ExceptionHandler(value = EmployeeNotFoundByPassportIdException.class)
-    public ResponseEntity<CustomExceptionResponse> handleEmployeeNotFoundByPassportIdException(EmployeeNotFoundByPassportIdException ex){
+    public ResponseEntity<CustomExceptionResponse> handleEmployeeNotFoundByPassportIdException(EmployeeNotFoundByPassportIdException ex) {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
-        log.trace(exceptionMessage,ex);
+        log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
     }
 
     @ExceptionHandler(value = PassportIdConflictException.class)
-    public ResponseEntity<CustomExceptionResponse> handlePassportIdConflictException(PassportIdConflictException ex){
+    public ResponseEntity<CustomExceptionResponse> handlePassportIdConflictException(PassportIdConflictException ex) {
         String exceptionMessage = ex.getMessage();
         log.error(exceptionMessage);
-        log.trace(exceptionMessage,ex);
+        log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(handle(ex));
     }
 
@@ -123,6 +125,15 @@ public class DefaultRestExceptionHandler {
         log.error(exceptionMessage);
         log.trace(exceptionMessage, ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(handle(ex));
+    }
+
+    @ExceptionHandler(value = WrongPasswordException.class)
+    public ResponseEntity<CustomExceptionResponse> handleWrongPasswordException(
+            WrongPasswordException ex) {
+        String exceptionMessage = ex.getMessage();
+        log.error(exceptionMessage);
+        log.trace(exceptionMessage, ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(handle(ex));
     }
 
     private CustomExceptionResponse handle(Exception ex) {

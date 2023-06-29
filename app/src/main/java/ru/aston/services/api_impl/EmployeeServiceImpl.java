@@ -1,20 +1,21 @@
-package ru.aston.app.api_impl;
+package ru.aston.services.api_impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.aston.app.api.repositories.EmployeeRepository;
-import ru.aston.app.api.repositories.GeneratePasswordRepository;
-import ru.aston.app.api.services.EmployeeService;
-import ru.aston.app.api.services.MailService;
+import ru.aston.exception.WrongPasswordException;
+import ru.aston.repositories.EmployeeRepository;
+import ru.aston.repositories.GeneratePasswordRepository;
+import ru.aston.services.EmployeeService;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
 import ru.aston.model.GeneratePassword;
 import ru.aston.request.EmployeeSearchCriteria;
+import ru.aston.services.MailService;
 import ru.util.PasswordGeneratorUtils;
 
 import java.time.LocalDateTime;
@@ -98,7 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String createNewEmployee(Employee employee) {
         UUID uuid = UUID.randomUUID();
 
-        while (employeeRepository.existByUuid(uuid)){
+        while (employeeRepository.existByUuid(uuid)) {
             uuid = UUID.randomUUID();
         }
 
@@ -113,12 +114,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         generatePasswordRepository.save(generatePassword);
         employeeRepository.save(employee);
         mailService.sendSimpleEmailFromGeneratePassword(employee);
-        log.info("New employee with login ({}) was registered",employee.getLogin());
+        log.info("New employee with login ({}) was registered", employee.getLogin());
         return uuid.toString();
-    }
-
-    private Employee findEmployeeByLogin(String login) {
-        return employeeRepository.findEmployeeByLogin(login);
     }
 
     private void checkTimeGeneratePassword(LocalDateTime generatePasswordTime) {
@@ -127,20 +124,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    private void checkExistedLogin(String login){
-        if(employeeRepository.existByLogin(login)) {
+    private void checkExistedLogin(String login) {
+        if (employeeRepository.existByLogin(login)) {
             log.info("Employee with login = ({}) was not created because this login already " +
                     "belongs to another employee", login);
             throw new LoginConflictException();
         }
     }
 
-    private void checkExistedPassportId(String passportId){
-        if(employeeRepository.existByPassportId(passportId)){
+    private void checkExistedPassportId(String passportId) {
+        if (employeeRepository.existByPassportId(passportId)) {
             log.info("Employee with passport id = ({}) was not created because this passport" +
-                    " id used another employee",passportId);
+                    " id used another employee", passportId);
             throw new PassportIdConflictException(passportId);
         }
     }
+
+    @Override
+    public Employee checkEmployeeByLoginAndPassword(String login, String password) {
+        Employee employee = employeeRepository.findEmployeeByLogin(login);
+        if (!employee.getGeneratePassword().getPassword().equals(password)) {
+            log.info("Employee with login = ({}) was not found, because password is incorrect", login);
+            throw new WrongPasswordException();
+        }
+        return employee;
+    }
+
+
 }
 
