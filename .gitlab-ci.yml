@@ -2,13 +2,41 @@ include:
   - project: 'rvaliev/devops'
     ref: main
     file:
+      - 'templates/build-template.yml'
+      - 'templates/deploy-template.yml'
       - 'templates/sonar-template.yml'
 
 stages:
-  - test
+  - build
+  - deploy
+  - cleanup
 
-run-test:
-  stage: test
-  extends: .sonar-mvn-template-jdk17
-  rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"
+variables:
+  PROJECT: a-money
+  APP: admin-service
+
+
+docker-build:
+  stage: build
+  extends: .kaniko-build-template
+  only:
+    - main
+
+
+deploy:
+  stage: deploy
+  tags:
+    - shell-dev
+  extends: .deploy-template
+  only:
+    - main
+
+cleanup:
+  stage: cleanup
+  tags:
+    - shell-dev
+  script:
+     - docker system prune -f --filter "label!=keep"
+  when: always
+  only:
+    - main
