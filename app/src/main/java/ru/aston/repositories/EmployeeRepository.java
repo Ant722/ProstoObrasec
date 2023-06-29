@@ -1,4 +1,4 @@
-package ru.aston.app.api.repositories;
+package ru.aston.repositories;
 
 import org.springframework.data.domain.Page;
 import ru.aston.model.Employee;
@@ -14,9 +14,17 @@ public interface EmployeeRepository {
 
     Employee findEmployeeByUuid(UUID uuid);
 
+    Employee findEmployeeByLogin(String login);
+
+    Employee findEmployeeByPassportId(String passportId);
+
     Employee save(Employee employee);
 
+    boolean existByUuid(UUID uuid);
+
     boolean existByLogin(String login);
+
+    boolean existByPassportId(String passportId);
 
     Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria);
 }

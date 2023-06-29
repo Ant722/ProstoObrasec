@@ -1,6 +1,6 @@
 INSERT INTO generate_password
     (id, password)
-VALUES (1, 'password');
+VALUES (1, 'P@ssw0rd123');
 INSERT INTO employee
 (id,
  uuid,

@@ -1,24 +1,22 @@
 version: '3'
 
 services:
-  postgres-admin:
-    image: "postgres:12.3"
-    container_name: admin-services
+  admin-service:
+    image: $AND_DOCKER_REGISTRY_NAME/$PROJECT-$APP:$CI_COMMIT_BRANCH
+    container_name: $APP
+    restart: on-failure
     environment:
-      - POSTGRES_DB=A-money
-      - POSTGRES_PASSWORD=amoneypass
-      - POSTGRES_USER=amoney
+      - EUREKA_URL=http://eureka-service:8083/eureka
+      - SPRING_DATASOURCE_USERNAME=amoney
+      - SPRING_DATASOURCE_PASSWORD=amoneypass
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-java:5432/admin-service
     ports:
-      - 5435:5432
-    volumes:
-      - verification-postgres:/var/lib/postgresql/data
+      - "8086:8086"
     networks:
-      - postgres
+      - admin
+
 networks:
-  deposit:
-    name: a-money
-  postgres:
+  admin:
     name: a-money
 
-volumes:
-  verification-postgres:
+

@@ -1,6 +1,7 @@
 package ru.aston.rest.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,9 +13,11 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.aston.dto.request.EmployeeCreateDto;
 import ru.aston.dto.request.EmployeeSearchCriteriaDto;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
+import ru.aston.dto.response.UuidResponseDto;
 import ru.aston.dto.response.SearchEmployeeResultDto;
 import ru.aston.facade.EmployeeFacade;
 
@@ -118,5 +121,40 @@ public class EmployeeController {
     public ResponseEntity<SearchEmployeeResultDto> searchEmployeesByUsername(
             @Valid @ParameterObject EmployeeSearchCriteriaDto dto) {
         return ResponseEntity.ok(employeeFacade.searchEmployeesByUsername(dto));
+    }
+
+    @Operation(
+            summary = "Add new employee",
+            description = "Allow to add new employee"
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Adding new employee was successfully compleate",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "BAD REQUEST",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "NOT FOUND",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Conflict",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "INTERNAL SERVER ERROR",
+                            content = @Content)
+            })
+    @PostMapping
+    public ResponseEntity<UuidResponseDto> createNewEmployee(
+            @Valid
+            @Parameter(description = "Employee registered dto")
+            @RequestBody EmployeeCreateDto employeeDto){
+        return ResponseEntity.ok().body(employeeFacade.createNewEmployee(employeeDto));
     }
 }

@@ -1,4 +1,4 @@
-package ru.aston.app.api.services;
+package ru.aston.services;
 
 import ru.aston.model.Employee;
 

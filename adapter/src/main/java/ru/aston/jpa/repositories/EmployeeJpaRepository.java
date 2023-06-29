@@ -17,6 +17,9 @@ import java.util.UUID;
 public interface EmployeeJpaRepository extends JpaRepository<Employee, Long>, QuerydslPredicateExecutor<Employee> {
 
     Optional<Employee> findByUuid(UUID uuid);
-
-    Boolean existsByLogin(String login);
+    Optional<Employee> findEmployeeByLogin(String login);
+    Optional<Employee>findEmployeeByPassportId(String passportId);
+    boolean existsByUuid(UUID uuid);
+    boolean existsByLogin(String login);
+    boolean existsByPassportId(String passportId);
 }

@@ -9,7 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Repository;
-import ru.aston.app.api.repositories.EmployeeRepository;
+import ru.aston.exception.EmployeeNotFoundByPassportIdException;
+import ru.aston.repositories.EmployeeRepository;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.jpa.repositories.EmployeeJpaRepository;
 import ru.aston.model.Employee;
@@ -48,11 +49,6 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public boolean existByLogin(String login) {
-        return employeeJpaRepository.existsByLogin(login);
-    }
-
-    @Override
     public Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria) {
         QEmployee employee = QEmployee.employee;
         String surname = searchCriteria.getSurname();
@@ -69,5 +65,31 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
         } catch (PropertyReferenceException e) {
             throw new ValidationException("Sort field is invalid");
         }
+    }
+
+    public Employee findEmployeeByPassportId(String passportId) {
+        return employeeJpaRepository.findEmployeeByPassportId(passportId)
+                .orElseThrow(()-> new EmployeeNotFoundByPassportIdException(passportId));
+    }
+
+    @Override
+    public Employee findEmployeeByLogin(String login) {
+        return employeeJpaRepository.findEmployeeByLogin(login)
+                .orElseThrow(() -> new EmployeeNotFoundException(login));
+    }
+
+    @Override
+    public boolean existByUuid(UUID uuid){
+        return employeeJpaRepository.existsByUuid(uuid);
+    }
+
+    @Override
+    public boolean existByLogin(String login) {
+        return employeeJpaRepository.existsByLogin(login);
+    }
+
+    @Override
+    public boolean existByPassportId(String passportId) {
+        return employeeJpaRepository.existsByPassportId(passportId);
     }
 }

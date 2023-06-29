@@ -3,12 +3,15 @@ package ru.aston.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import ru.aston.dto.request.EmployeeCreateDto;
 import org.springframework.data.domain.Page;
 import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.EmployeeShortInformationDto;
 import ru.aston.dto.response.SearchEmployeeResultDto;
+import ru.aston.dto.response.EmployeeAuthInfoResponseDto;
 import ru.aston.model.Employee;
+import ru.aston.model.GeneratePassword;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,6 +35,14 @@ public interface EmployeeMapper {
     SearchEmployeeResultDto mapPageToSearchEmployeeResultDto(Page<Employee> page);
 
     @Mappings({
+            @Mapping(source = "employeeCreateDto.passportDateIssue", target = "passportDateIssue", dateFormat = DATE_PATTERN_FORMAT),
+            @Mapping(source = "employeeCreateDto.status.status", target = "status"),
+            @Mapping(source = "employeeCreateDto.role.role", target = "role")
+    })
+    Employee mapEmployeeCreateDtoToEmployee(EmployeeCreateDto employeeCreateDto);
+
+
+    @Mappings({
             @Mapping(source = "employeeUpdateDto.passport", target = "passportId"),
             @Mapping(source = "employeeUpdateDto.passportDateIssue", target = "passportDateIssue", dateFormat = DATE_PATTERN_FORMAT),
             @Mapping(source = "employeeUpdateDto.status.status", target = "status"),
@@ -44,4 +55,8 @@ public interface EmployeeMapper {
                 .withZone(ZoneId.systemDefault())
                 .format(localDateTime);
     }
+
+
+            @Mapping(source = "generatePassword.password", target = "password")
+    EmployeeAuthInfoResponseDto mapEmployeeToResponseDto(Employee employee, GeneratePassword generatePassword);
 }
