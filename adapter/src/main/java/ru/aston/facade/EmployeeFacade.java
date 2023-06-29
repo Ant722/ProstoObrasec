@@ -3,19 +3,21 @@ package ru.aston.facade;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.aston.app.api.services.EmployeeService;
 import ru.aston.dto.request.EmployeeCreateDto;
-import ru.aston.app.api.services.MailService;
 import ru.aston.dto.request.EmployeeSearchCriteriaDto;
+import ru.aston.services.EmployeeService;
 import ru.aston.dto.request.EmployeeUpdateDto;
+import ru.aston.dto.request.LoginRequestDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.PasswordGenerateInfoDto;
 import ru.aston.dto.response.UuidResponseDto;
 import ru.aston.dto.response.SearchEmployeeResultDto;
+import ru.aston.dto.response.EmployeeAuthInfoResponseDto;
 import ru.aston.mapper.EmployeeMapper;
 import ru.aston.mapper.SearchCriteriaMapper;
 import ru.aston.model.Employee;
 import ru.aston.request.EmployeeSearchCriteria;
+import ru.aston.services.MailService;
 
 import java.util.UUID;
 
@@ -69,8 +71,17 @@ public class EmployeeFacade {
                 employeeService.searchEmployeesByUsername(searchCriteria));
     }
 
-    public UuidResponseDto createNewEmployee(EmployeeCreateDto employeeCreateDto){
+    public UuidResponseDto createNewEmployee(EmployeeCreateDto employeeCreateDto) {
         Employee employee = employeeMapper.mapEmployeeCreateDtoToEmployee(employeeCreateDto);
         return new UuidResponseDto(employeeService.createNewEmployee(employee));
+    }
+
+    /**
+     * Accepts LoginRequestDto. Gets Employee from DB by login and maps it to EmployeeAuthInfoResponseDto
+     */
+    public EmployeeAuthInfoResponseDto getInformationByLogin(LoginRequestDto loginRequestDto) {
+        Employee employee =
+                employeeService.checkEmployeeByLoginAndPassword(loginRequestDto.getLogin(), loginRequestDto.getPassword());
+        return employeeMapper.mapEmployeeToResponseDto(employee, employee.getGeneratePassword());
     }
 }

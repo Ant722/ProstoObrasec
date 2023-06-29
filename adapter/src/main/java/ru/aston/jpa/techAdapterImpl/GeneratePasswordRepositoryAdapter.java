@@ -2,7 +2,7 @@ package ru.aston.jpa.techAdapterImpl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.aston.app.api.repositories.GeneratePasswordRepository;
+import ru.aston.repositories.GeneratePasswordRepository;
 import ru.aston.jpa.repositories.GeneratePasswordJpaRepository;
 import ru.aston.model.GeneratePassword;
 

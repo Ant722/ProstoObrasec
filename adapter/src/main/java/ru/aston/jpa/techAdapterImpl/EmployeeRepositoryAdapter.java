@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Repository;
-import ru.aston.app.api.repositories.EmployeeRepository;
 import ru.aston.exception.EmployeeNotFoundByPassportIdException;
+import ru.aston.repositories.EmployeeRepository;
 import ru.aston.exception.EmployeeNotFoundException;
 import ru.aston.jpa.repositories.EmployeeJpaRepository;
 import ru.aston.model.Employee;
@@ -92,5 +92,4 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     public boolean existByPassportId(String passportId) {
         return employeeJpaRepository.existsByPassportId(passportId);
     }
-
 }

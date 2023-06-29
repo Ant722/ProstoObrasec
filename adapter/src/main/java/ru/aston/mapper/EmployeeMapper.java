@@ -9,7 +9,9 @@ import ru.aston.dto.request.EmployeeUpdateDto;
 import ru.aston.dto.response.EmployeeInformationDto;
 import ru.aston.dto.response.EmployeeShortInformationDto;
 import ru.aston.dto.response.SearchEmployeeResultDto;
+import ru.aston.dto.response.EmployeeAuthInfoResponseDto;
 import ru.aston.model.Employee;
+import ru.aston.model.GeneratePassword;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -53,4 +55,8 @@ public interface EmployeeMapper {
                 .withZone(ZoneId.systemDefault())
                 .format(localDateTime);
     }
+
+
+            @Mapping(source = "generatePassword.password", target = "password")
+    EmployeeAuthInfoResponseDto mapEmployeeToResponseDto(Employee employee, GeneratePassword generatePassword);
 }

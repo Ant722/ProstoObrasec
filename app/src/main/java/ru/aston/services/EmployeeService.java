@@ -1,4 +1,4 @@
-package ru.aston.app.api.services;
+package ru.aston.services;
 
 import org.springframework.data.domain.Page;
 import ru.aston.model.Employee;
@@ -21,4 +21,5 @@ public interface EmployeeService {
 
     Page<Employee> searchEmployeesByUsername(EmployeeSearchCriteria searchCriteria);
 
+    Employee checkEmployeeByLoginAndPassword(String login, String Password);
 }

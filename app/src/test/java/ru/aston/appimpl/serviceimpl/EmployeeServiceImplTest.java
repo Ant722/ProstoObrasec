@@ -7,14 +7,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.aston.app.api.repositories.EmployeeRepository;
-import ru.aston.app.api_impl.EmployeeServiceImpl;
-import ru.aston.app.api_impl.MailServiceImpl;
+import ru.aston.repositories.EmployeeRepository;
 import ru.aston.appimpl.serviceimpl.entity_factory.EmployeeFactory;
 import ru.aston.exception.LoginConflictException;
 import ru.aston.exception.PassportIdConflictException;
 import ru.aston.exception.PasswordGenerateTimeException;
 import ru.aston.model.Employee;
+import ru.aston.services.api_impl.EmployeeServiceImpl;
+import ru.aston.services.api_impl.MailServiceImpl;
 
 import java.util.UUID;
 
@@ -57,7 +57,7 @@ public class EmployeeServiceImplTest {
     }
     @Test
     public void createNewEmployee_ShouldOK_WhenEmployeeValid(){
-        Employee employee =EmployeeFactory.getValidEmployee();
+        Employee employee = EmployeeFactory.getValidEmployee();
         when(employeeRepository.existByUuid(any())).thenReturn(false);
         when(employeeRepository.existByLogin(any())).thenReturn(false);
         when(employeeRepository.existByPassportId(any())).thenReturn(false);

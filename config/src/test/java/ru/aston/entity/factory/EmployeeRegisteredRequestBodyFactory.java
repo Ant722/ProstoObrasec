@@ -8,7 +8,6 @@ public class EmployeeRegisteredRequestBodyFactory {
 
     private String surname;
 
-
     private String name;
 
     private String middleName;
