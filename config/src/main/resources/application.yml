@@ -37,5 +37,10 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URL}
+
+logging:
+  level:
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
+
 page:
   default-size: 30
